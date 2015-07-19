@@ -1,2 +1,2 @@
 # SIMCOPV
-Sistema de Control de Permisos y Vacaciones
+Sistema Informático de Monitoreo y Control de Permisos y Vacaciones
