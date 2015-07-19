@@ -12,3 +12,16 @@ $RECYCLE.BIN/
 # Linux
 !.gitignore
 !.htaccess
+
+# Python/Django
+*.py[cod]
+.installed.cfg
+bin
+develop-eggs
+dist
+downloads
+eggs
+parts
+src/*.egg-info
+lib
+lib64
