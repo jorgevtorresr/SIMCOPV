@@ -14,6 +14,7 @@ $RECYCLE.BIN/
 !.htaccess
 
 # Python/Django
+staticfiles
 *.py[cod]
 .installed.cfg
 bin

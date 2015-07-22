@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SIMCOPV Página Principal</title>
+	{% load static from staticfiles %}
+	<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css"%}" />
+</head>
+<body>
+	<marquee> {{hora}} </marquee>
+	{% for i in lista %}
+	<li>{{i}}</li>
+	{% endfor %}
+</body>
+</html>
