@@ -15,7 +15,7 @@ class TipoNotificacion(models.Model):
 	tipon_nombre = models.CharField(max_length=55)
 
 class Notificacion(models.Model):
-	bot_descripcion = models.CharField(max_length=255)
+	not_descripcion = models.CharField(max_length=255)
 	not_estado_visto = models.BooleanField()
 	usuario = models.ForeignKey(User)
 	tiponotif = models.ForeignKey('TipoNotificacion')

@@ -3,6 +3,11 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from django.template import Context
 from datetime import datetime
+from .models import Persona, TipoNotificacion, Periodo, Notificacion
+from .serializers import (UserSerializer, PersonaSerializer, TipoNotificacionSerializer, 
+	NotificacionSerializer, PeriodoSerializer)
+from rest_framework import viewsets
+from django.contrib.auth.models import User
 
 # Create your views here.
 def hola(request):
@@ -27,3 +32,23 @@ def nuevo(request):
 
 def post(request, num):
 	return HttpResponse("Este es el post %i" % int(num))
+
+class UserViewSet(viewsets.ModelViewSet):
+	queryset = User.objects.all()
+	serializer_class = UserSerializer
+
+class PersonaViewSet(viewsets.ModelViewSet):
+	queryset = Persona.objects.all()
+	serializer_class = PersonaSerializer
+
+class TipoNotificacionViewSet(viewsets.ModelViewSet):
+	queryset = TipoNotificacion.objects.all()
+	serializer_class = TipoNotificacionSerializer
+
+class NotificacionViewSet(viewsets.ModelViewSet):
+	queryset = Notificacion.objects.all()
+	serializer_class = NotificacionSerializer
+
+class PeriodoViewSet(viewsets.ModelViewSet):
+	queryset = Periodo.objects.all()
+	serializer_class = PeriodoSerializer

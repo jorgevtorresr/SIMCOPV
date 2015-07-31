@@ -15,6 +15,20 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from rest_framework import routers
+from usuarios.views import (UserViewSet, PersonaViewSet,
+    TipoNotificacionViewSet, PeriodoViewSet, NotificacionViewSet)
+from vacaciones.views import VacacionViewSet
+from permisos.views import PermisoViewSet
+
+router = routers.DefaultRouter()
+router.register(r'persona', PersonaViewSet)
+router.register(r'user', UserViewSet)
+router.register(r'tiponotificacion', TipoNotificacionViewSet)
+router.register(r'periodo', PeriodoViewSet)
+router.register(r'notificacion', NotificacionViewSet)
+router.register(r'vacacion', VacacionViewSet)
+router.register(r'permiso', PermisoViewSet)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -23,4 +37,6 @@ urlpatterns = [
     url(r'^hora_actual/$', 'usuarios.views.hora_actual' , name='hora_actual'),
     url(r'^bootstrap/$', 'usuarios.views.bootstrap' , name='bootstrap'),
     url(r'^hola/$', 'usuarios.views.nuevo' , name='nuevo'),
+    url(r'^api/', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace = 'rest_framework')),
 ]
