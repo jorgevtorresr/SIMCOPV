@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>Puls4: Comunidad Open Source Cool</title>
+	{% load static from staticfiles %}
+	<link rel="stylesheet" href="{% static "bootstrap.min.css"%}"/>
+	<link rel="stylesheet" href="{% static "hola.css"%}"/>
+	<script src="{% static "jquery-2.1.4.min.js"%}"></script>
+<!-- Las hojas de estilo van en el header -->
+</head>
+<body>
+	<header class="row">
+		<div class="logo col-xs-1">
+			<figure>{{toto}}</figure>
+		</div>
+		<div class="col-xs-10">
+			<h1 class="titulo">
+				Puls4: Comunidad Profesional de gente atractiva 
+			</h1>
+			<div>
+				<a class="filtro" href="#">
+					Responsive Design
+				</a>
+				<a class="publicar pull-right btn btn-default" href="#">
+					Publicar
+				</a>
+			</div>
+		</div>
+		<div class="usuario col-xs-1">
+			<figure class="avatar"></figure>
+			<a class="flecha" href="#"></a>
+		</div>
+	</header>
+	<nav>
+		<ul class="menu nav nav-tabs">
+			<li><a href="#">Python</a></li>
+			<li><a href="#">HTML5</a></li>
+			<li><a href="#">JavaScript</a></li>
+			<li><a href="#">Django</a></li>
+			<li><a href="#">CSS3</a></li>
+		</ul>
+	</nav>
+	<form action="">
+		<p>
+			<label for="titulo">Titulo</label>
+			<input placeholder="Ingrese el Titulo" id="titulo" name="titulo" type="text"></p>
+		<p>
+			<label for="autor">Autor</label>
+			<input id="autor" name="autor" type="text"></p>
+		<p>
+			<label for="tag">Tag</label>
+			<input id="tag" name="tag" type="text"></p>
+		<input class="post" type="submit" value="Publicar"/>
+	</form>
+	<section class="posts row">
+		<div class="col-sm-6 ">
+			<article class="post"> 
+				<div class="descripcion row">
+					<figure class="imagen col-xs-3">
+					</figure>
+					<div class="detalles col-xs-9">
+						<h2 class="titulo">
+							Colores, gradientes y texto 3D con Sass y Compass
+						</h2>
+						<p class="autor">
+							por <a href="#">Diana Reyes</a>
+						</p>
+						<a class="tag btn btn-default" href="#">CSS3</a>
+						<p class="fecha pull-right">hace <strong>20</strong> min</p>
+					</div>
+				</div>
+				<div class="acciones">
+					<div class="votos">
+						<a class="up" href="#"/>
+						<span class="total pull-left">156</span>
+						<a class="down" href="#"/>
+					</div>
+					<div class="datos">
+						<a class="comentarios pull-right btn btn-primary" href="#">
+							10
+						</a>
+						<a class="estrella" href="#"/>
+					</div>
+				</div>
+			</article>	
+		</div>
+		<div class="col-sm-6 ">
+			<article class="post"> 
+				<div class="descripcion row">
+					<figure class="imagen col-xs-3">
+					</figure>
+					<div class="detalles col-xs-9">
+						<h2 class="titulo">
+							Colores, gradientes y texto 3D con Sass y Compass
+						</h2>
+						<p class="autor">
+							por <a href="#">Diana Reyes</a>
+						</p>
+						<a class="tag btn btn-default" href="#">CSS3</a>
+						<p class="fecha pull-right">hace <strong>20</strong> min</p>
+					</div>
+				</div>
+				<div class="acciones">
+					<div class="votos">
+						<a class="up" href="#"/>
+						<span class="total pull-left">156</span>
+						<a class="down" href="#"/>
+					</div>
+					<div class="datos">
+						<a class="comentarios pull-right btn btn-primary" href="#">
+							10
+						</a>
+						<a class="estrella" href="#"/>
+					</div>
+				</div>
+			</article>	
+		</div>
+		<div class="col-sm-6 ">
+			<article class="post"> 
+				<div class="descripcion row">
+					<figure class="imagen col-xs-3">
+					</figure>
+					<div class="detalles col-xs-9">
+						<h2 class="titulo">
+							Colores, gradientes y texto 3D con Sass y Compass
+						</h2>
+						<p class="autor">
+							por <a href="#">Diana Reyes</a>
+						</p>
+						<a class="tag btn btn-default" href="#">CSS3</a>
+						<p class="fecha pull-right">hace <strong>20</strong> min</p>
+					</div>
+				</div>
+				<div class="acciones">
+					<div class="votos">
+						<a class="up" href="#"/>
+						<span class="total pull-left">156</span>
+						<a class="down" href="#"/>
+					</div>
+					<div class="datos">
+						<a class="comentarios pull-right btn btn-primary" href="#">
+							10
+						</a>
+						<a class="estrella" href="#"/>
+					</div>
+				</div>
+			</article>	
+		</div>
+		<div class="col-sm-6 ">
+			<article class="post"> 
+				<div class="descripcion row">
+					<figure class="imagen col-xs-3">
+					</figure>
+					<div class="detalles col-xs-9">
+						<h2 class="titulo">
+							Colores, gradientes y texto 3D con Sass y Compass
+						</h2>
+						<p class="autor">
+							por <a href="#">Diana Reyes</a>
+						</p>
+						<a class="tag btn btn-default" href="#">CSS3</a>
+						<p class="fecha pull-right">hace <strong>20</strong> min</p>
+					</div>
+				</div>
+				<div class="acciones">
+					<div class="votos">
+						<a class="up" href="#"/>
+						<span class="total pull-left">156</span>
+						<a class="down" href="#"/>
+					</div>
+					<div class="datos">
+						<a class="comentarios pull-right btn btn-primary" href="#">
+							10
+						</a>
+						<a class="estrella" href="#"/>
+					</div>
+				</div>
+			</article>	
+		</div>
+		<div class="col-sm-6 ">
+			<article class="post"> 
+				<div class="descripcion row">
+					<figure class="imagen col-xs-3">
+					</figure>
+					<div class="detalles col-xs-9">
+						<h2 class="titulo">
+							Colores, gradientes y texto 3D con Sass y Compass
+						</h2>
+						<p class="autor">
+							por <a href="#">Diana Reyes</a>
+						</p>
+						<a class="tag btn btn-default" href="#">CSS3</a>
+						<p class="fecha pull-right">hace <strong>20</strong> min</p>
+					</div>
+				</div>
+				<div class="acciones">
+					<div class="votos">
+						<a class="up" href="#"/>
+						<span class="total pull-left">156</span>
+						<a class="down" href="#"/>
+					</div>
+					<div class="datos">
+						<a class="comentarios pull-right btn btn-primary" href="#">
+							10
+						</a>
+						<a class="estrella" href="#"/>
+					</div>
+				</div>
+			</article>	
+		</div>
+		<div class="col-sm-6 ">
+			<article class="post"> 
+				<div class="descripcion row">
+					<figure class="imagen col-xs-3">
+					</figure>
+					<div class="detalles col-xs-9">
+						<h2 class="titulo">
+							Colores, gradientes y texto 3D con Sass y Compass
+						</h2>
+						<p class="autor">
+							por <a href="#">Diana Reyes</a>
+						</p>
+						<a class="tag btn btn-default" href="#">CSS3</a>
+						<p class="fecha pull-right">hace <strong>20</strong> min</p>
+					</div>
+				</div>
+				<div class="acciones">
+					<div class="votos">
+						<a class="up" href="#"/>
+						<span class="total pull-left">156</span>
+						<a class="down" href="#"/>
+					</div>
+					<div class="datos">
+						<a class="comentarios pull-right btn btn-primary" href="#">
+							10
+						</a>
+						<a class="estrella" href="#"/>
+					</div>
+				</div>
+			</article>	
+		</div>
+		<div class="col-sm-6 ">
+			<article class="post"> 
+				<div class="descripcion row">
+					<figure class="imagen col-xs-3">
+					</figure>
+					<div class="detalles col-xs-9">
+						<h2 class="titulo">
+							Colores, gradientes y texto 3D con Sass y Compass
+						</h2>
+						<p class="autor">
+							por <a href="#">Diana Reyes</a>
+						</p>
+						<a class="tag btn btn-default" href="#">CSS3</a>
+						<p class="fecha pull-right">hace <strong>20</strong> min</p>
+					</div>
+				</div>
+				<div class="acciones">
+					<div class="votos">
+						<a class="up" href="#"/>
+						<span class="total pull-left">156</span>
+						<a class="down" href="#"/>
+					</div>
+					<div class="datos">
+						<a class="comentarios pull-right btn btn-primary" href="#">
+							10
+						</a>
+						<a class="estrella" href="#"/>
+					</div>
+				</div>
+			</article>	
+		</div>
+	</section>
+	<footer class="text-center">
+		<h3>
+			<strong>Powered by Nero64</strong>
+			<span class="mejor">
+				Utmachala.edu.ec 2013
+			</span>
+		</h3>
+	</footer>
+<!-- Los Scripts siempre van antes de cerrar la etiqueta body -->
+<!-- Usa Google Analytics, I think so! -->
+	<script>
+	function Javass()
+	{
+		alert('Bienvenido !');
+	}
+	function darBienvenida()
+	{
+		console.log("Estoy haciendo JavaScript :)");
+	}
+	//Esto es igual
+	$(document).on('ready', function()
+	{
+	});
+	// A esto
+	$(function()
+	{
+		$(window)
+			.on('load', Javass)
+			.on('load', darBienvenida)
+			.off('load', Javass);
+		$('.publicar').on('click', mostrarFormulario);
+		function mostrarFormulario()
+		{
+			$('form').slideToggle();
+		}
+		$('form').on('submit', procesarFormulario);
+		function procesarFormulario(ev)
+		{
+			ev.preventDefault();
+			var titulo = $('input[name=titulo]').val();
+			var autor = $('input[name=autor]').val();
+			var tag = $('input[name=tag]').val();
+			var template = '<div class="col-sm-6 "> \
+				<article class="post"> \
+					<div class="descripcion row"> \
+						<figure class="imagen col-xs-3"> \
+						</figure> \
+						<div class="detalles col-xs-9"> \
+							<h2 class="titulo"> \
+								'+titulo+' \
+							</h2> \
+							<p class="autor"> \
+								por <a href="#">'+autor+'</a> \
+							</p> \
+							<a class="tag btn btn-default" href="#">'+tag+'</a> \
+							<p class="fecha pull-right">hace <strong>0</strong> min</p> \
+						</div> \
+					</div> \
+					<div class="acciones"> \
+						<div class="votos"> \
+							<a class="up" href="#"/> \
+							<span class="total pull-left">0</span> \
+							<a class="down" href="#"/> \
+						</div> \
+						<div class="datos"> \
+							<a class="comentarios pull-right btn btn-primary" href="#"> \
+								0 \
+							</a> \
+							<a class="estrella" href="#"/> \
+						</div> \
+					</div> \
+				</article> \
+				</div>';
+				// Los puntos (.) antes de un nombre hacen referencia a una clase
+				$('.posts').prepend($(template).fadeIn(function()
+					{
+						$(this).css('display','inline-block');
+					}));
+				$('input[type=text]').val('');
+				$('form').slideUp();
+		}
+		function crearSize(pixels)
+		{
+			return function()
+			{
+				$('body').css('font-size', pixels+'px');
+			}
+		}
+
+	});
+	</script>
+</body>
+</html>

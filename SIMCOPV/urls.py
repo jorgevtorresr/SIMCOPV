@@ -20,5 +20,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'usuarios.views.hola', name='hola'),
     url(r'^post/(\d{1,3})/$', 'usuarios.views.post', name="post"),
-    url(r'^hora_actual/$', 'usuarios.views.hora_actual' , name='hora_actual')
+    url(r'^hora_actual/$', 'usuarios.views.hora_actual' , name='hora_actual'),
+    url(r'^bootstrap/$', 'usuarios.views.bootstrap' , name='bootstrap'),
+    url(r'^hola/$', 'usuarios.views.nuevo' , name='nuevo'),
 ]

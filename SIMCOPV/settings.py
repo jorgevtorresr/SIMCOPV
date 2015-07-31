@@ -38,6 +38,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'usuarios',
+    'vacaciones',
+    'permisos',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -56,7 +59,7 @@ ROOT_URLCONF = 'SIMCOPV.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,7 +84,7 @@ DATABASES = {
         'NAME': 'DBPrueba',
         'USER': 'hr',
         'PASSWORD': 'Admin20081994',
-        'HOST': '192.168.56.102',
+        'HOST': '192.168.56.101',
         'PORT': '1521',
     }
 }
@@ -99,11 +102,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_ROOT = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2]+['static'])
+# STATIC_ROOT = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2]+['staticfiles'])
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
-STATICFILES_DIRS = ( os.path.join(BASE_DIR,'staticfiles'), )
+STATICFILES_DIRS = ( os.path.join(BASE_DIR,'static'), )
 STATIC_URL = '/static/'
