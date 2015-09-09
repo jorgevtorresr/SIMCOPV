@@ -1,5 +1,4 @@
 """SIMCOPV URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.8/topics/http/urls/
 Examples:
@@ -32,11 +31,8 @@ router.register(r'permiso', PermisoViewSet)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'usuarios.views.hola', name='hola'),
-    url(r'^post/(\d{1,3})/$', 'usuarios.views.post', name="post"),
-    url(r'^hora_actual/$', 'usuarios.views.hora_actual' , name='hora_actual'),
-    url(r'^bootstrap/$', 'usuarios.views.bootstrap' , name='bootstrap'),
-    url(r'^hola/$', 'usuarios.views.nuevo' , name='nuevo'),
+    url(r'^$', 'usuarios.views.index', name='index'),
+    url(r'^base/$', 'usuarios.views.base', name='base'),
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace = 'rest_framework')),
 ]
