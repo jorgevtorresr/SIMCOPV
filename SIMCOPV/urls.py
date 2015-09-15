@@ -32,9 +32,11 @@ router.register(r'permiso', PermisoViewSet)
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'usuarios.views.index', name='index'),
-    url(r'^base/$', 'usuarios.views.base', name='base'),
+    url(r'^simcopv/$', 'usuarios.views.base', name='base'),
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace = 'rest_framework')),
     url(r'^config/$', 'usuarios.views.config', name='config'),
     url(r'^permiso/$', 'permisos.views.permiso', name='permiso'),
+    url(r'^cuenta/login/$', 'usuarios.views.autenticacion', name='auth'),
+    url(r'^cuenta/logout/$', 'usuarios.views.auth_logout', name='logout'),
 ]
