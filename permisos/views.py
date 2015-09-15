@@ -2,6 +2,14 @@ from django.shortcuts import render
 from .models import Permiso
 from .serializers import PermisoSerializer
 from rest_framework import viewsets
+from permisos.forms import PermisoUsuarioForm
+
+def permiso(request):
+	if request.method == "POST":
+		pass
+	else:
+		form = PermisoUsuarioForm()
+	return render(request, "permiso.html",{"form":form})
 
 # Create your views here.
 class PermisoViewSet(viewsets.ModelViewSet):

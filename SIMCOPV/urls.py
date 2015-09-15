@@ -35,4 +35,6 @@ urlpatterns = [
     url(r'^base/$', 'usuarios.views.base', name='base'),
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace = 'rest_framework')),
+    url(r'^config/$', 'usuarios.views.config', name='config'),
+    url(r'^permiso/$', 'permisos.views.permiso', name='permiso'),
 ]

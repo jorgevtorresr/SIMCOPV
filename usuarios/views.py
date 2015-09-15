@@ -9,6 +9,7 @@ from .serializers import (UserSerializer, PersonaSerializer, TipoNotificacionSer
 	NotificacionSerializer, PeriodoSerializer)
 from rest_framework import viewsets
 from django.contrib.auth.models import User
+from permisos.forms import PermisoUsuarioForm
 
 # Create your views here.
 def index(request):
@@ -16,6 +17,13 @@ def index(request):
 
 def base(request):
 	return render_to_response('base.html', {})
+
+def config(request):
+	if request.method == "POST":
+		pass
+	else:
+		form = PermisoUsuarioForm()
+	return render(request, "configuracion.html",{"form":form})
 
 class UserViewSet(viewsets.ModelViewSet):
 	queryset = User.objects.all()
