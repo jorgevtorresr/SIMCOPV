@@ -11,6 +11,7 @@ def permiso(request):
 		pass
 	else:
 		form = PermisoUsuarioForm()
+		
 	return render(request, "permiso.html",{"form":form})
 
 # Create your views here.
