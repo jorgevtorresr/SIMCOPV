@@ -9,6 +9,8 @@ class Unidad(models.Model):
 class Persona(models.Model):
 	puesto = models.CharField(max_length=25)
 	unidad = models.ForeignKey('Unidad')
+	foto = models.ImageField(upload_to="profile-pics/", default='profile-pics/image-default.png', 
+		blank=True, null=True)
 	usuario = models.OneToOneField(User)
 
 class TipoNotificacion(models.Model):

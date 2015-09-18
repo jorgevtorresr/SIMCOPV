@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+	<form action="" method="post" class="form" role="form">
+		{% csrf_token %}
+		{{form}}
+		<br>	
+		<button type="submit" class="btn btn-info">Agregar Usuario</button>
+		<a href="#modal-unidad-agregar" class="btn btn-primary pull-right" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> Agregar Unidad</a>
+	</form>
+	<br>
+	{% if men %}
+		<div class="alert alert-warning">
+			<button class="close" data-dismiss="alert"><span>&times;</span></button>
+			<strong>Alerta!</strong> {{men}}
+		</div>
+	{% endif %}
+	<div class="modal fade" id="modal-unidad-agregar">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4>Agregar Unidad</h4>
+				</div>
+				<form action="" method="post" role="form" class="form">
+					{% csrf_token %}
+					<div class="modal-body">
+						{{form_unidad}}
+						<input name="unidad" type="hidden" value="unidad">
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-default" data-dismiss="modal" value="aceptar">Cancelar</button>
+						<button type="submit" class="btn btn-info">Agregar Unidad</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock content %}

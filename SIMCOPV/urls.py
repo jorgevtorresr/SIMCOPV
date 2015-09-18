@@ -35,8 +35,10 @@ urlpatterns = [
     url(r'^simcopv/$', 'usuarios.views.base', name='base'),
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace = 'rest_framework')),
-    url(r'^config/$', 'usuarios.views.config', name='config'),
+    url(r'^config/$', 'usuarios.views.images', name='config'),
     url(r'^permiso/$', 'permisos.views.permiso', name='permiso'),
+    url(r'^usuarios/agregarperiodo/$', 'usuarios.views.agregar_periodo', name='agregarperiodo'),
+    url(r'^usuarios/agregarusuario/$', 'usuarios.views.agregar_usuario', name='agregarusuario'),
     url(r'^cuenta/login/$', 'usuarios.views.autenticacion', name='auth'),
     url(r'^cuenta/logout/$', 'usuarios.views.auth_logout', name='logout'),
 ]
