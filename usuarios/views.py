@@ -21,8 +21,13 @@ from django.core.files.storage import default_storage
 
 # Create your views here.
 def index(request):
+	images = []
+	with open("{0}/frontimages.json".format(settings.MEDIA_ROOT)) as json_data:
+		d = json.load(json_data)
+		for image in d.values():
+			images.append("{0}frontimages/".format(settings.MEDIA_URL)+image)
 	usuario = request.user
-	return render_to_response('usuarios/index.html',{"usuario":usuario})
+	return render_to_response('usuarios/index.html',{"usuario":usuario,"images":images})
 
 def base(request):
 	usuario = request.user
@@ -89,10 +94,10 @@ def images(request):
 		image2 = request.FILES.get("imagen2","")
 		image3 = request.FILES.get("imagen3","")
 		image4 = request.FILES.get("imagen4","")
-		#handle_uploaded_file(image1)
-		#handle_uploaded_file(image2)
-		#handle_uploaded_file(image3)
-		#handle_uploaded_file(image4)
+		handle_uploaded_file(image1)
+		handle_uploaded_file(image2)
+		handle_uploaded_file(image3)
+		handle_uploaded_file(image4)
 		dic = {"imagen":image1._get_name(), "image2":image2._get_name(), "image3":image3._get_name(),"image4":image4._get_name()}
 		jsonob = json.dumps(dic)
 		save_json(jsonob)

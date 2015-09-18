@@ -72,22 +72,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 				<!-- Wrapper for slides -->
 				<div class="carousel-inner" role="listbox">
-					<div class="item active  image-wid">
-					<img src="{% static "./img/ima1.png"%}" alt="..." class="img-responsive">
+					{% for image in images %}
+					<div class="item image-wid">
+					<img src="{{image}}" alt="..." class="img-responsive">
 					</div>
-
-					<div class="item  image-wid">
-					<img src="{% static "./img/ima2.png"%}" alt="..." class="img-responsive">
-					</div>
-
-					<div class="item  image-wid">
-					<img src="{% static "./img/ima3.png"%}" alt="..." class="img-responsive">
-					</div>
-
-					<div class="item  image-wid">
-					<img src="{% static "./img/ima4.png"%}" alt="..." class="img-responsive">
-					</div>
-
+					{% endfor %}
 				</div>
 				<!-- Controls -->
 				<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
@@ -117,6 +106,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<!--script-->
 			<script type="text/javascript" src="{% static "js/move-top.js"%}"></script>
 			<script type="text/javascript" src="{% static "js/easing.js"%}"></script>
+			<script>
+				$("div.image-wid").first().addClass("active");
+			</script>
 		<!--script-->
 	</body>
 </html>
