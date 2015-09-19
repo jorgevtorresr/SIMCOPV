@@ -1,6 +1,6 @@
 from django.db import models
-from usuarios.models import Periodo
 from django.contrib.auth.models import User
+from apps.usuarios.models import Periodo
 
 # Create your models here.
 class Permiso(models.Model):

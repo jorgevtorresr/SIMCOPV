@@ -1,5 +1,5 @@
 from django import forms 
-from usuarios.models import Persona, Unidad
+from .models import Persona, Unidad
 
 class PersonaForm(forms.ModelForm):
 	def __init__ (self, *args, **kwargs):

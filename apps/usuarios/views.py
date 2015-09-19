@@ -1,24 +1,21 @@
 #! python2
 # -*- coding: utf-8 -*-
+import os
+import json
+from datetime import datetime
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import PersonaForm, LoginForm, UnidadForm
 from django.template.loader import get_template
 from django.template import Context
 from django.conf import settings
-from datetime import datetime
+from django.core.files.storage import default_storage
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from rest_framework import viewsets
 from .models import Persona, TipoNotificacion, Periodo, Notificacion
+from .forms import PersonaForm, LoginForm, UnidadForm, FrontImages
 from .serializers import (UserSerializer, PersonaSerializer, TipoNotificacionSerializer, 
 	NotificacionSerializer, PeriodoSerializer)
-from rest_framework import viewsets
-from django.contrib.auth.models import User
-from permisos.forms import PermisoUsuarioForm
-from usuarios.forms import PersonaForm
-from django.contrib.auth import authenticate, login, logout
-import json
-from .forms import FrontImages
-from django.core.files.storage import default_storage
-import os
 
 # Create your views here.
 def index(request):

@@ -16,10 +16,10 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework import routers
-from usuarios.views import (UserViewSet, PersonaViewSet,
+from apps.usuarios.views import (UserViewSet, PersonaViewSet,
     TipoNotificacionViewSet, PeriodoViewSet, NotificacionViewSet)
-from vacaciones.views import VacacionViewSet
-from permisos.views import PermisoViewSet
+from apps.vacaciones.views import VacacionViewSet
+from apps.permisos.views import PermisoViewSet
 
 router = routers.DefaultRouter()
 router.register(r'persona', PersonaViewSet)
@@ -32,14 +32,10 @@ router.register(r'permiso', PermisoViewSet)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'usuarios.views.index', name='index'),
-    url(r'^simcopv/$', 'usuarios.views.base', name='base'),
-    url(r'^config/$', 'usuarios.views.images', name='config'),
-    url(r'^permiso/$', 'permisos.views.permiso', name='permiso'),
-    url(r'^registrar/agregarperiodo/$', 'usuarios.views.agregar_periodo', name='agregarperiodo'),
-    url(r'^registrar/agregarusuario/$', 'usuarios.views.agregar_usuario', name='agregarusuario'),
-    url(r'^cuenta/login/$', 'usuarios.views.autenticacion', name='auth'),
-    url(r'^cuenta/logout/$', 'usuarios.views.auth_logout', name='logout'),
+    url(r'^$', 'apps.usuarios.views.index', name='index'),
+    url(r'^usuarios/', include('apps.usuarios.urls')),
+    url(r'^permisos/', include('apps.permisos.urls')),
+    url(r'^vacaciones/', include('apps.vacaciones.urls')),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve',{'document_root': settings.MEDIA_ROOT}),
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace = 'rest_framework')),

@@ -37,9 +37,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'usuarios',
-    'vacaciones',
-    'permisos',
+    # My apps
+    'apps.usuarios',
+    'apps.vacaciones',
+    'apps.permisos',
+    # Third-part apps
     'rest_framework',
 )
 
@@ -67,7 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'usuarios.context_processors.user',
+                'apps.usuarios.context_processors.user',
             ],
         },
     },
@@ -115,4 +117,4 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStora
 STATICFILES_DIRS = ( os.path.join(BASE_DIR,'static'), )
 STATIC_URL = '/static/'
 
-LOGIN_URL = "/cuenta/login/"
+LOGIN_URL = "/usuarios/cuenta/login/"

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from usuarios.models import Periodo
+from apps.usuarios.models import Periodo
 
 # Create your models here.
 class Vacacion(models.Model):
