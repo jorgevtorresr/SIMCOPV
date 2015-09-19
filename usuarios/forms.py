@@ -11,11 +11,13 @@ class PersonaForm(forms.ModelForm):
 		self.fields['unidad'].widget.attrs.update({'class':'form-control'})
 		self.fields['foto'].widget.attrs.update({'class':'form-control'})
 		self.fields['email'].widget.attrs.update({'class':'form-control'})
+		self.fields['password'].widget.attrs.update({"class":"form-control"})
 
 	cedula = forms.CharField(max_length=10)
 	nombre = forms.CharField(max_length=25)
 	apellido = forms.CharField(max_length=25)
 	email = forms.EmailField()
+	password = forms.CharField(max_length=16)
 
 	class Meta:
 		model = Persona

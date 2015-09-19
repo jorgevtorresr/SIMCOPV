@@ -6,6 +6,9 @@ class Unidad(models.Model):
 	idunidad = models.AutoField(primary_key=True)
 	nombre = models.CharField(max_length=75)
 
+	def __unicode__(self):
+		return self.nombre
+
 class Persona(models.Model):
 	puesto = models.CharField(max_length=25)
 	unidad = models.ForeignKey('Unidad')

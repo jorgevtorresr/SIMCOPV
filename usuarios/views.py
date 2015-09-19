@@ -18,6 +18,7 @@ from django.contrib.auth import authenticate, login, logout
 import json
 from .forms import FrontImages
 from django.core.files.storage import default_storage
+import os
 
 # Create your views here.
 def index(request):
@@ -27,18 +28,11 @@ def index(request):
 		for image in d.values():
 			images.append("{0}frontimages/".format(settings.MEDIA_URL)+image)
 	usuario = request.user
-	return render_to_response('usuarios/index.html',{"usuario":usuario,"images":images})
+	return render_to_response('index.html',{"usuario":usuario,"images":images})
 
 def base(request):
 	usuario = request.user
 	return render_to_response('base.html', {"usuario":usuario})
-
-def config(request):
-	if request.method == "POST":
-		pass
-	else:
-		form = PermisoUsuarioForm()
-	return render(request, "usuarios/configuracion.html",{"form":form})
 
 def agregar_usuario(request):
 	if request.method == "POST":
@@ -46,21 +40,27 @@ def agregar_usuario(request):
 			form = PersonaForm()
 			form_unidad = UnidadForm(request.POST)
 			if form_unidad.is_valid():
-				men = "is_valid unidad!"
+				form_unidad.save()
+				men = "Unidad Agregada Correctamente!"
 				return render(request, 'usuarios/agregarusuario.html',{"form":form,"form_unidad":form_unidad,"men":men})
 		else:
 			form = PersonaForm(request.POST)
 			form_unidad = UnidadForm()
 			if form.is_valid():
-				men = "is valid!"
+				cedula = form.cleaned_data["cedula"]
+				nombre = form.cleaned_data["nombre"]
+				apellido = form.cleaned_data["apellido"]
+				email = form.cleaned_data["email"]
+				usuario = User.objects.create_user(username=cedula, first_name=nombre, last_name=apellido, email=email)
+				men  = "Crear esto es horrible!"
 				return render(request, 'usuarios/agregarusuario.html',{"form":form,"form_unidad":form_unidad,"men":men})
 	else:
 		form = PersonaForm()
 		form_unidad = UnidadForm()
 	return render(request, 'usuarios/agregarusuario.html',{"form":form,"form_unidad":form_unidad})
 
-def agregar_periodo(request):
-	return render(request, "usuarios/periodo.html",{})
+def agregar_periodo(request):	
+	return render(request, "usuarios/agregarperiodo.html",{})
 
 def autenticacion(request):
 	if request.method == "POST":
@@ -79,13 +79,13 @@ def autenticacion(request):
 						return HttpResponseRedirect("/simcopv/")
 				else:
 					mensaje = "El usuario no esta actualmente activo"
-					return render(request, "usuarios/login.html",{"men":mensaje,"form":form})
+					return render(request, "login.html",{"men":mensaje,"form":form})
 			else:
 				mensaje = "La combinación de Usuario y Contraseña es Incorrecta"
-				return render(request, "usuarios/login.html",{"men":mensaje,"form":form})
+				return render(request, "login.html",{"men":mensaje,"form":form})
 	else:
 		form = LoginForm()
-	return render(request, "usuarios/login.html",{'form':form})
+	return render(request, "login.html",{'form':form})
 
 def images(request):
 	if request.method == "POST":
@@ -94,24 +94,44 @@ def images(request):
 		image2 = request.FILES.get("imagen2","")
 		image3 = request.FILES.get("imagen3","")
 		image4 = request.FILES.get("imagen4","")
-		handle_uploaded_file(image1)
-		handle_uploaded_file(image2)
-		handle_uploaded_file(image3)
-		handle_uploaded_file(image4)
-		dic = {"imagen":image1._get_name(), "image2":image2._get_name(), "image3":image3._get_name(),"image4":image4._get_name()}
-		jsonob = json.dumps(dic)
-		save_json(jsonob)
-		return render(request, "usuarios/configuracion.html",{"form":form})
+		if image1 == "" or image2 == "" or image3 == "" or image4 == "":
+			men = "Suba todas las imagenes"
+			return render(request, "usuarios/configuracion.html",{"form":form,"men":men})
+		else:
+			a = existe(image1)
+			b = existe(image2)
+			c = existe(image3)
+			d = existe(image4)
+			if a or b or c or d:
+				men = "Imagen ya existe"
+				return render(request, "usuarios/configuracion.html",{"form":form,"men":men})
+			else:
+				handle_uploaded_file(image1)
+				handle_uploaded_file(image2)
+				handle_uploaded_file(image3)
+				handle_uploaded_file(image4)
+				dic = {"imagen":image1._get_name(), "image2":image2._get_name(), "image3":image3._get_name(),"image4":image4._get_name()}
+				jsonob = json.dumps(dic)
+				save_json(jsonob)
+				success = "Imagenes Actualizadas Correctamente"
+				return render(request, "usuarios/configuracion.html",{"form":form,"success":success})
 	else:
 		form = FrontImages()
 	return render(request,"usuarios/configuracion.html",{"form":form})
 
+
 def handle_uploaded_file(f):
+	"""Recibe una imagen(archivo) y la guarda en la carpeta 'media/frontimages' """
 	filename = f._get_name()
-	fd = open('{0}/{1}'.format(settings.MEDIA_ROOT,'frontimages/{0}'.format(filename)),'wb')
-	for chunk in f.chunks():
-		fd.write(chunk)
-	fd.close()
+	ruta = '{0}/{1}'.format(settings.MEDIA_ROOT,'frontimages/{0}'.format(filename))
+	with open(ruta,'wb+') as fd:
+		for chunk in f.chunks():
+			fd.write(chunk)
+
+def existe(f):
+	filename = f._get_name()
+	ruta = '{0}/{1}'.format(settings.MEDIA_ROOT,'frontimages/{0}'.format(filename))
+	return os.path.exists(ruta)
 
 def save_json(jsonob):
 	with open('{0}/frontimages.json'.format(settings.MEDIA_ROOT), 'wb+') as destination:
