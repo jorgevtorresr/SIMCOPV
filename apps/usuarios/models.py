@@ -16,6 +16,9 @@ class Persona(models.Model):
 		blank=True, null=True)
 	usuario = models.OneToOneField(User)
 
+	def __unicode__(self):
+		return self.usuario.username
+
 class TipoNotificacion(models.Model):
 	tipon_nombre = models.CharField(max_length=55)
 

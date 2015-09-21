@@ -4,6 +4,7 @@ import os
 import json
 from datetime import datetime
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.storage import default_storage
@@ -12,7 +13,7 @@ from django.shortcuts import render, render_to_response
 from django.template.loader import get_template
 from django.template import Context
 from rest_framework import viewsets
-from .models import Persona, TipoNotificacion, Periodo, Notificacion
+from .models import Persona, TipoNotificacion, Periodo, Notificacion, Unidad
 from .forms import PersonaForm, LoginForm, UnidadForm, FrontImages
 from .serializers import (UserSerializer, PersonaSerializer, TipoNotificacionSerializer, 
 	NotificacionSerializer, PeriodoSerializer)
@@ -41,18 +42,28 @@ def agregar_usuario(request):
 				men = "Unidad Agregada Correctamente!"
 				return render(request, 'usuarios/agregarusuario.html',{"form":form,"form_unidad":form_unidad,"men":men})
 		else:
-			form = PersonaForm(request.POST)
+			form = PersonaForm(request.POST, request.FILES)
 			form_unidad = UnidadForm()
 			if form.is_valid():
 				cedula = form.cleaned_data["cedula"]
 				nombre = form.cleaned_data["nombre"]
 				apellido = form.cleaned_data["apellido"]
 				email = form.cleaned_data["email"]
+				password = form.cleaned_data["password"]
+				unidad = form.cleaned_data["unidad"]
+				puesto = form.cleaned_data["puesto"]
+				foto = form.cleaned_data["foto"]
 				if verificar(cedula):
-					usuario = User.objects.create_user(username=cedula, first_name=nombre, last_name=apellido, email=email)
+					usuario = User.objects.create_user(username=cedula, first_name=nombre, last_name=apellido, email=email,password=password)
+					if usuario != None:
+						persona = Persona(usuario = usuario,puesto = puesto,unidad = unidad, foto=foto)
+						persona.save()
+						messages.add_message(request, messages.INFO, "Usuario Creado Satisfactoriamente")
+					else: 
+						men = "Error al Insertar Usuario!"
 				else:
 					men = "Cedula Invalida!"
-				return render(request, 'usuarios/agregarusuario.html',{"form":form,"form_unidad":form_unidad,"men":men})
+				return HttpResponseRedirect("")
 	else:
 		form = PersonaForm()
 		form_unidad = UnidadForm()
