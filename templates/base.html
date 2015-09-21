@@ -16,6 +16,7 @@
     <!-- Bootstrap 3.3.4 -->
     <link href="{% static "bootstrap/css/bootstrap.min.css"%}" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
+    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-theme.min.css" %}">
     <link href="{% static "css/vendor/AdminLTE.min.css"%}" rel="stylesheet" type="text/css" />
     <link href="{% static "css/vendor/skins/skin-blue.min.css"%}" rel="stylesheet" type="text/css" />
     {% endblock css %}
@@ -147,7 +148,8 @@
               </a>
               <ul class="nav nav-second-level">
                 <li><a href="{% url 'agregarusuario' %}">Usuarios</a></li>
-                <li><a href="{% url 'agregarperiodo' %}">Periodo</a></li>
+                <li><a href="{% url 'asignarroles' %}">Roles</a></li>
+                <li><a href="{% url 'agregarperiodo' %}">Periodos</a></li>
               </ul>
             </li>
             <li><a href="{% url 'permiso' %}"><i class='glyphicon glyphicon-user'></i> <span>Permisos</span></a></li>

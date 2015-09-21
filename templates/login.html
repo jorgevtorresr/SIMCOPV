@@ -5,6 +5,7 @@
 	<meta charset="UTF-8">
 	<title>SIMCOPV Login!</title>
 	<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css"%}">
+	<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-theme.min.css" %}">
 </head>
 <body>
 	<div class="container">
@@ -42,7 +43,7 @@
 								{{form.password}}
 							</div>
 							<div class="form-group">
-								<button class="btn btn-default" type="submit">Iniciar Sesión</button>
+								<button class="btn btn-primary" type="submit">Iniciar Sesión</button>
 							</div>
 						</form>
 						{{form.errors}}

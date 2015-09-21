@@ -16,10 +16,33 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<link href="{% static "css/owl.carousel.css"%}" rel="stylesheet">
 		<!--bootstrap-->
 		<link href="{% static "bootstrap/css/bootstrap.min.css"%}" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-theme.min.css" %}">
 		<!--custom css-->
 		<link href="{% static "css/index.css"%}" rel="stylesheet" type="text/css"/>
 	</head>
 	<body>
+		<div class="container">
+			{% if messages %}
+				<br>
+				{% for message in messages %}
+				{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+				<div class="alert alert-danger">	
+				{% endif %}
+				{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+				<div class="alert alert-success">	
+				{% endif %}
+				{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+				<div class="alert alert-warning">	
+				{% endif %}
+				{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+				<div class="alert alert-info">	
+				{% endif %}
+				<button class="close" data-dismiss="alert"><span>&times;</span></button>
+					<strong>Alerta!</strong> {{message}}	
+				</div>
+				{% endfor %}
+			{% endif %}
+		</div>
 		<div class="header" id="home">
 			<div class="header_nav" id="home">
 				<nav class="navbar navbar-default chn-gd">
@@ -48,7 +71,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						<li>
 						<a href="{% url 'auth' %}">
 						<span class="glyphicon glyphicon-home icn_pos hm1" aria-hidden="true"></span><br>
-						Login
+						Iniciar Sesión
 						</a>
 						</li>
 						{% endif %}

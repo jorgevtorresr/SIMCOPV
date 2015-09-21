@@ -5,6 +5,7 @@ import json
 from datetime import datetime
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.storage import default_storage
@@ -25,14 +26,17 @@ def index(request):
 		d = json.load(json_data)
 		for image in d.values():
 			images.append("{0}frontimages/".format(settings.MEDIA_URL)+image)
-	usuario = request.user
-	return render_to_response('index.html',{"usuario":usuario,"images":images})
+	return render(request,'index.html',{"images":images})
 
 def base(request):
 	usuario = request.user
 	if usuario.check_password(usuario.username):
 		return HttpResponseRedirect("/usuarios/cuenta/change_password/")
 	return render(request,'base.html',{})
+
+def asignar_roles(request):
+	
+	return render(request, "usuarios/asignar-roles.html",{})
 
 def agregar_usuario(request):
 	if request.method == "POST":
@@ -82,7 +86,21 @@ def agregar_usuario(request):
 def agregar_periodo(request):	
 	return render(request, "usuarios/agregarperiodo.html",{})
 
+@login_required
 def change_password(request):
+	if request.method == "POST":
+		oldpassword = request.POST.get("oldpassword","")
+		newpassword = request.POST.get("newpassword","")
+		if oldpassword=="" or newpassword == "":
+			messages.info(request,"No deje los campos vacíos (No se aceptan password vacíos)")
+		else:
+			if request.user.check_password(oldpassword):
+				request.user.set_password(newpassword)
+				request.user.save()
+				messages.success(request, "Contraseña cambiada con exito! Inicie sesión con el nuevo password")
+				return HttpResponseRedirect("/")
+			else:
+				messages.error(request, "Su anterior password no coincide")
 	return render(request,"usuarios/change-password.html",{})
 
 def images(request):

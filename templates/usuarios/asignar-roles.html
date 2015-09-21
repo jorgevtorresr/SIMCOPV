@@ -1,22 +1,11 @@
 {% extends "base.html" %}
-{% block title %}
-	SIMCOPV Agregar Periodo
-{% endblock title %}
-{% block css %}
-	{{block.super}}
-	<style>
-		table.table{
-			background-color: #2dfcb2;
-		}
-		table.table tr:hover{
-			cursor:pointer;
-		}
-	</style>
-{% endblock css %}
+{% load static from staticfiles %}
 {% block sidebar %}
-<div id="sid" class="sidebar-nav navbar-collapse">
+      <!-- Sidebar Menu -->
+  <div id="sid" class="sidebar-nav navbar-collapse">
   <ul class="sidebar-menu nav" id="side-menu">
     <li class="header">Control</li>
+    <!-- Optionally, you can add icons to the links -->
     <li>
       <a href="{% url 'base' %}"><i class='glyphicon glyphicon-dashboard'></i> <span>Inicio</span></a>
     </li>
@@ -33,25 +22,9 @@
     <li><a href="{% url 'permiso' %}"><i class='glyphicon glyphicon-user'></i> <span>Permisos</span></a></li>
     <li><a href="#"><i class='glyphicon glyphicon-pencil'></i> <span>Vacaciones</span></a></li>
     <li><a href="{% url 'config' %}"><i class='glyphicon glyphicon-cog'></i> <span>Configuracion</span></a></li>
-  </ul>
- </div>
-{% endblock %}
+  </ul><!-- /.sidebar-menu -->
+  </div>
+{% endblock sidebar %}
 {% block content %}
-	<h3 class="text-center">Lista de Usuarios</h3>
-	<table class="table table-bordered table-hover">
-		<thead>
-			<tr>
-				<th>1</th>
-				<th>2</th>
-				<th>3</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>1</td>
-				<td>2</td>
-				<td>3</td>
-			</tr>
-		</tbody>
-	</table>
+	
 {% endblock content %}
