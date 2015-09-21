@@ -13,6 +13,6 @@ class PermisoUsuarioForm(ModelForm):
 
 	class Meta:
 		model = Permiso
-		exclude = ["ced_jefe_inmed","ced_jef_talent","ced_gerente","comprobante","estado","periodo","usuario"]
+		exclude = ["ced_jefe_inmed","ced_jef_talent","ced_gerente","comprobante","estado","tipo","periodo","usuario"]
 		widgets = {'fecha_inicio':DateInput(),
 					'fecha_fin':DateInput()}

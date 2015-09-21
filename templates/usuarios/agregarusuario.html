@@ -10,7 +10,6 @@
       <a href="#"><i class='glyphicon glyphicon-book'></i><span>Registrar</span>
       <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div>
       </a>
-
       <ul class="nav nav-second-level">
         <li><a href="{% url 'agregarusuario' %}">Usuarios</a></li>
         <li><a href="{% url 'agregarperiodo' %}">Periodo</a></li>
@@ -23,14 +22,26 @@
  </div>
 {% endblock %}
 {% block content %}
-	<h3 class="text-center">Agregar Usuario</h3>
-	<form action="" method="post" class="form" role="form">
-		{% csrf_token %}
-		{{form}}
-		<br>	
-		<button type="submit" class="btn btn-info">Agregar Usuario</button>
-		<a href="#modal-unidad-agregar" class="btn btn-primary pull-right" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> Agregar Unidad</a>
-	</form>
+	<div class="row">
+		<div class="col-sm-3 hidden-xs hidden-sm">
+		</div>
+		<div class="col-xs-12 col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<h3 class="text-center">Agregar Usuario</h3>
+					<form action="" method="post" class="form" role="form">
+						{% csrf_token %}
+						{{form}}
+						<br>	
+						<button type="submit" class="btn btn-info">Agregar Usuario</button>
+						<a href="#modal-unidad-agregar" class="btn btn-primary pull-right" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> Agregar Unidad</a>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-3 hidden-xs hidden-sm">
+		</div>
+	</div>
 	<br>
 	{% if men %}
 		<div class="alert alert-sucess">
@@ -59,3 +70,13 @@
 		</div>
 	</div>
 {% endblock content %}
+{% block javascript %}
+	{{block.super}}
+	<script>
+		$("#id_password").attr("readonly","readonly");
+		$("#id_cedula").on("focusout",function(){
+			var text = $(this).val();
+			$(this).siblings("input#id_password").val(text);
+		});
+	</script>
+{% endblock javascript %}

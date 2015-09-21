@@ -25,14 +25,22 @@
 {% endblock %}
 {% block content %}
 	<div class="row">
-		<div class="col-xs-12">
-			<form action="" method="post" class="form" role="form">
-				{% csrf_token %}
-				{{form}}
-				<br>
-				<button class="btn btn-success" type="input">Aceptar</button>
-			</form>
-			{{form.errors}}
-		</div>
+    <div class="col-sm-3 hidden-xs hidden-sm">
+    </div>
+    <div class="col-xs-12 col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-body">
+    			<form action="" method="post" class="form" role="form">
+    				{% csrf_token %}
+    				{{form}}
+    				<br>
+    				<button class="btn btn-success" type="input">Solicitar Permiso</button>
+    			</form>
+    			{{form.errors}}
+    		</div> 
+      </div>
+    </div>
 	</div>
+  <div class="col-sm-3 hidden-xs hidden-sm">
+  </div>
 {% endblock %}

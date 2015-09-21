@@ -21,7 +21,7 @@ class PersonaForm(forms.ModelForm):
 
 	class Meta:
 		model = Persona
-		exclude = ("usuario",)
+		fields = ("cedula","nombre","apellido","puesto","password","unidad","foto","email")
 
 class UnidadForm(forms.ModelForm):
 	def __init__ (self, *args, **kwargs):
