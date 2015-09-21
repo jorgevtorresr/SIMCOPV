@@ -30,7 +30,9 @@ def index(request):
 
 def base(request):
 	usuario = request.user
-	return render_to_response('base.html', {"usuario":usuario})
+	if usuario.check_password(usuario.username):
+		return HttpResponseRedirect("/usuarios/cuenta/change_password/")
+	return render(request,'base.html',{})
 
 def agregar_usuario(request):
 	if request.method == "POST":
@@ -79,6 +81,9 @@ def agregar_usuario(request):
 
 def agregar_periodo(request):	
 	return render(request, "usuarios/agregarperiodo.html",{})
+
+def change_password(request):
+	return render(request,"usuarios/change-password.html",{})
 
 def images(request):
 	if request.method == "POST":

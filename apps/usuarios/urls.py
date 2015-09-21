@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     url(r'^registrar/agregarusuario/$', 'apps.usuarios.views.agregar_usuario', name='agregarusuario'),
     url(r'^cuenta/login/$', 'apps.usuarios.views.autenticacion', name='auth'),
     url(r'^cuenta/logout/$', 'apps.usuarios.views.auth_logout', name='logout'),
+    url(r'^cuenta/change_password/$', 'apps.usuarios.views.change_password', name='change_password'),
 )
