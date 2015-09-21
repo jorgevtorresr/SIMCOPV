@@ -54,15 +54,23 @@ def agregar_usuario(request):
 				puesto = form.cleaned_data["puesto"]
 				foto = form.cleaned_data["foto"]
 				if verificar(cedula):
-					usuario = User.objects.create_user(username=cedula, first_name=nombre, last_name=apellido, email=email,password=password)
-					if usuario != None:
-						persona = Persona(usuario = usuario,puesto = puesto,unidad = unidad, foto=foto)
-						persona.save()
-						messages.add_message(request, messages.INFO, "Usuario Creado Satisfactoriamente")
-					else: 
-						men = "Error al Insertar Usuario!"
+					existe = True
+					try:
+						user1 = User.objects.get(username=cedula)	
+					except: 
+						existe = False
+					if existe:
+						messages.warning(request, "Cedula ya en uso");
+					else:
+						usuario = User.objects.create_user(username=cedula, first_name=nombre, last_name=apellido, email=email,password=password)
+						if usuario != None:
+							persona = Persona(usuario = usuario,puesto = puesto,unidad = unidad, foto=foto)
+							persona.save()
+							messages.add_message(request, messages.SUCCESS, "Usuario Creado Satisfactoriamente")
+						else: 
+							messages.error(request, "Error al Insertar Usuario!")
 				else:
-					men = "Cedula Invalida!"
+					messages.error(request, "Cedula Invalida!")
 				return HttpResponseRedirect("")
 	else:
 		form = PersonaForm()
@@ -186,11 +194,14 @@ def verificar(nro):
             elif tercer_dig == 9: # si es ruc
                 return __validar_ced_ruc(nro,2) # sociedades privadas
             else:
-                raise Exception(u'Tercer digito invalido') 
+                #raise Exception(u'Tercer digito invalido') 
+                return False
         else:
-            raise Exception(u'Codigo de provincia incorrecto') 
+            #raise Exception(u'Codigo de provincia incorrecto') 
+            return False
     else:
-        raise Exception(u'Longitud incorrecta del numero ingresado')
+        #raise Exception(u'Longitud incorrecta del numero ingresado')
+        return False
 
 def __validar_ced_ruc(nro,tipo):
     total = 0

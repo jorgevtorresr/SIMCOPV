@@ -15,7 +15,7 @@ class Persona(models.Model):
 	foto = models.ImageField(upload_to="profile-pics/", default='profile-pics/image-default.png', 
 		blank=True, null=True)
 	usuario = models.OneToOneField(User)
-
+	
 	def __unicode__(self):
 		return self.usuario.username
 
