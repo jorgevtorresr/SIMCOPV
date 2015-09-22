@@ -33,7 +33,7 @@
         <form id="grupo" action="" method="get" role="form">
          <ul class="nav nav-pills nav-stacked">
             <li role="presentation" class="active"><a href="#1">Jefes Inmediatos</a></li>
-             <li role="presentation"><a href="#2">Secretaria</a></li> 
+             <li role="presentation"><a href="#2">Secretarias</a></li> 
              <li role="presentation"><a href="#3">Usuarios</a></li> 
              <li role="presentation"><a href="#4">Gerente y Encargados</a></li> 
              <li role="presentation"><a href="#5">Jefe Talento y Encargados</a></li>
@@ -46,7 +46,8 @@
    <div class="col-xs-9">
      <div class="panel panel-primary">
         <div class="panel-heading">
-          <h4>Lista de Usuarios</h4>
+          <h4 style="display:inline-block">Lista de Usuarios</h4>
+          <button class="btn btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Agregar Usuario</button>
         </div>
        <div class="panel-body" id="content-table"> 
        </div>
@@ -70,6 +71,36 @@
       });
     }
     ajaxfy(1);
+    $("a[href=\"#1\"]").on("click",function(){
+      $("input#id_grupo").val("1");
+      ajaxfy(1);
+      $(this).parent().siblings().removeClass("active");
+      $(this).parent().addClass("active");
+    });
+    $("a[href=\"#2\"]").on("click",function(){
+      $("input#id_grupo").val("2");
+      ajaxfy(2);
+      $(this).parent().siblings().removeClass("active");
+      $(this).parent().addClass("active");
+    });
+    $("a[href=\"#3\"]").on("click",function(){
+      $("input#id_grupo").val("3");
+      ajaxfy(3);
+      $(this).parent().siblings().removeClass("active");
+      $(this).parent().addClass("active");
+    });
+    $("a[href=\"#4\"]").on("click",function(){
+      $("input#id_grupo").val("4");
+      ajaxfy(4);
+      $(this).parent().siblings().removeClass("active");
+      $(this).parent().addClass("active");
+    });
+    $("a[href=\"#5\"]").on("click",function(){
+      $("input#id_grupo").val("5");
+      ajaxfy(5);
+      $(this).parent().siblings().removeClass("active");
+      $(this).parent().addClass("active");
+    });
   });
   </script>
 {% endblock javascript %}
