@@ -47,12 +47,28 @@
      <div class="panel panel-primary">
         <div class="panel-heading">
           <h4 style="display:inline-block">Lista de Usuarios</h4>
-          <button class="btn btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Agregar Usuario</button>
+          <a href="#usuarios" data-toggle="modal" class="btn btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Agregar Usuario</a>
         </div>
        <div class="panel-body" id="content-table"> 
        </div>
      </div>
    </div>
+  </div>
+  <div class="modal fade" id="usuarios">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Agregar Usuario</h4>
+        </div>
+        <div class="modal-body">
+          <h3>Nothing yet</h3>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-default" data-dismiss="modal" value="cancelar">Cancelar</button>
+          <button type="submit" class="btn btn-info">Agregar Usuario</button>
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock content %}
 {% block javascript %}
@@ -71,35 +87,41 @@
       });
     }
     ajaxfy(1);
+    $("div.panel-heading h4").text("Lista de Jefes Inmediatos");
     $("a[href=\"#1\"]").on("click",function(){
       $("input#id_grupo").val("1");
       ajaxfy(1);
       $(this).parent().siblings().removeClass("active");
       $(this).parent().addClass("active");
+      $("div.panel-heading h4").text("Lista de Jefes Inmediatos");
     });
     $("a[href=\"#2\"]").on("click",function(){
       $("input#id_grupo").val("2");
       ajaxfy(2);
       $(this).parent().siblings().removeClass("active");
       $(this).parent().addClass("active");
+      $("div.panel-heading h4").text("Lista de Secretarias");
     });
     $("a[href=\"#3\"]").on("click",function(){
       $("input#id_grupo").val("3");
       ajaxfy(3);
       $(this).parent().siblings().removeClass("active");
       $(this).parent().addClass("active");
+      $("div.panel-heading h4").text("Lista de Usuarios");
     });
     $("a[href=\"#4\"]").on("click",function(){
       $("input#id_grupo").val("4");
       ajaxfy(4);
       $(this).parent().siblings().removeClass("active");
       $(this).parent().addClass("active");
+      $("div.panel-heading h4").text("Lista de Gerente y Encargados");
     });
     $("a[href=\"#5\"]").on("click",function(){
       $("input#id_grupo").val("5");
       ajaxfy(5);
       $(this).parent().siblings().removeClass("active");
       $(this).parent().addClass("active");
+      $("div.panel-heading h4").text("Lista de Jefe Talento Humano y Encargados");
     });
   });
   </script>

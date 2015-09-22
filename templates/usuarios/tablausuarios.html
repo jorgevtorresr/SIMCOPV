@@ -1,17 +1,25 @@
-<table class="table table-bordered table-responsive">
+<table class="table table-bordered table-responsive text-center">
  <thead>
    <tr>
-     <th>1</th>
-     <th>2</th>
-     <th>3</th>
+    <th>Eliminar</th>
+     <th>Cédula</th>
+     <th>Nombre</th>
+     <th>Apellido</th>
+    <th>Puesto</th>
+     <th>Unidad</th>
    </tr>
  </thead>
  <tbody>
     {% for user in usuarios %}
     <tr>
-      <td>user.id</td>
-      <td>user.first_name</td>
-      <td>user.last_names</td>
+      <td style="width: 3px"><button class="btn btn-xs btn-danger eliminar">
+      <span class="glyphicon glyphicon-remove"></span>
+      </button></td>
+      <td>{{user.username}}</td>
+      <td>{{user.first_name}}</td>
+      <td>{{user.last_name}}</td>
+      <td>{{user.persona.puesto}}</td>
+      <td>{{user.persona.unidad}}</td>
     </tr>
     {% endfor %}
  </tbody>

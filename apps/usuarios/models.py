@@ -2,13 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
 
-# Create your models here.
+
 class GlobalPermissionManager(models.Manager):
     def get_query_set(self):
         return super(GlobalPermissionManager, self).\
             get_query_set().filter(content_type__name='global_permission')
 
-
+# Creation of Permission Model without a Model Object (content_type)
 class GlobalPermission(Permission):
     """A global permission, not attached to a model"""
 
