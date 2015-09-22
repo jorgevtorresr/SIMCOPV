@@ -13,22 +13,22 @@ body{
 	padding:0;
 }
 /*--fonts--*/
-@font-face{
-    font-family: 'OpenSans-Regular';
-    src: url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+@font-face {
+    font-family: 'Source-Sans-Pro';
+    src: url('../fonts/source-sans-pro/SourceSansPro-Regular.otf');
 }
 .header-top{
 	background:#38c2c5;
 	padding: 1em 0em;
 }
 .header-top p{
-	font-family: 'Monda', sans-serif;
+	font-family: 'Source-Sans-Pro';
 	font-size:16px;
 	font-weight:400;
 	color:#fff;
 }
 .navbar-header a.navbar-brand.logo-st,.navbar-header a.navbar-brand.logo-st:hover{
-	font-family: 'Roboto Slab', serif;
+	font-family: 'Source-Sans-Pro';
 	font-weight:700;
 	font-size: 35px;
 	text-decoration:none;
@@ -48,7 +48,7 @@ nav.navbar.navbar-default.chn-gd{
 .icn_pos.hm{
 	padding-left:12px;
 }
-.icn_pos.hm2 {
+.icn_pos.hm1 {
 	padding-left: 40px;
 }
 .navbar-default .navbar-nav>li{
@@ -57,6 +57,9 @@ nav.navbar.navbar-default.chn-gd{
 }
 .navbar-default .navbar-nav>li:nth-child(5){
 	border-right:none;
+}
+ul.nav.navbar-nav span{
+	font-family: 'Source-Sans-Pro';
 }
 .navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a{
 	padding: 4px 12px;
@@ -627,7 +630,7 @@ input.nuber {
 	text-align:center;
 }
 .footer-text h3 a,.footer-text h3 a:hover{
-	font-family: 'Roboto Slab', serif;
+	font-family: "Source-Sans-Pro";
 	font-weight: 700;
 	font-size: 35px;
 	text-decoration: none;
@@ -637,7 +640,7 @@ input.nuber {
 .footer-text p{
 	margin-top: 10px;
 	color: #fff;
-	font-family: 'Monda', sans-serif;
+	font-family: "Source-Sans-Pro";
 	font-size: 14px;
 	font-weight: 100;
 }

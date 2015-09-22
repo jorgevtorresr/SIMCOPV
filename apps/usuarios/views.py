@@ -6,15 +6,15 @@ from datetime import datetime
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.storage import default_storage
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, get_object_or_404
 from django.template.loader import get_template
 from django.template import Context
 from rest_framework import viewsets
-from .models import Persona, TipoNotificacion, Periodo, Notificacion, Unidad
+from .models import Persona, TipoNotificacion, Periodo, Notificacion, Unidad, GlobalPermission
 from .forms import PersonaForm, LoginForm, UnidadForm, FrontImages
 from .serializers import (UserSerializer, PersonaSerializer, TipoNotificacionSerializer, 
 	NotificacionSerializer, PeriodoSerializer)
@@ -34,9 +34,46 @@ def base(request):
 		return HttpResponseRedirect("/usuarios/cuenta/change_password/")
 	return render(request,'base.html',{})
 
+def creacionderoles():
+	# Creación de Grupos para el sistema
+	jefesinmediatos, g1 = Group.objects.get_or_create(name="Jefes Inmediatos")
+	secretarias, g2 = Group.objects.get_or_create(name="Secretarias")
+	usuarios, g3 = Group.objects.get_or_create(name="Usuarios")
+	gerentes, g4 = Group.objects.get_or_create(name="Gerente y Encargados")
+	jefesdetalento, g5 = Group.objects.get_or_create(name="Jefe de Talento Humano y Encargados")
+	# Creación de Permisos para acceso a secciónes del sitio
+	validarpermiso, p1 = GlobalPermission.objects.get_or_create(codename="validar_permiso", name="Validar Permisos")
+	pedirpermiso, p2 = GlobalPermission.objects.get_or_create(codename="pedir_permiso",name="Pedir Permiso")
+	crearvacaciones, p3 = GlobalPermission.objects.get_or_create(codename="crear_vacaciones", name="Crear Vacaciones")
+	validarvacaciones, p4 = GlobalPermission.objects.get_or_create(codename="validar_vacaciones", name="Validar Vacaciones") 
+	registrarusuarios, p5 = GlobalPermission.objects.get_or_create(codename="registrar_usuarios", name="Registrar Usuarios")
+	cambiarpassword, p6 = GlobalPermission.objects.get_or_create(codename="cambiar_password", name="Cambiar Password")
+	# Asignación de permisos a los diversos grupos
+	jefesinmediatos.permissions.clear()
+	jefesinmediatos.permissions = (crearvacaciones,pedirpermiso,validarpermiso)
+	secretarias.permissions.clear()
+	secretarias.permissions = (registrarusuarios,cambiarpassword,pedirpermiso)
+	usuarios.permissions.clear()
+	usuarios.permissions.add(pedirpermiso)
+	gerentes.permissions.clear()
+	gerentes.permissions.add(validarpermiso)
+	jefesdetalento.permissions.clear()
+	jefesdetalento.permissions = (validarvacaciones, validarpermiso, registrarusuarios, cambiarpassword, pedirpermiso)
+
 def asignar_roles(request):
-	
+	creacionderoles()
 	return render(request, "usuarios/asignar-roles.html",{})
+
+def ajax_table_usuarios(request,id):
+	if request.is_ajax():
+		query = request.GET.get("grupo","")
+		try:
+			grupo = get_object_or_404(Group, pk=int(query))
+			usuarios = grupo.user_set.all()
+			return render(request, "usuarios/tablausuarios.html",{"usuarios":usuarios})
+		except:
+			raise Http404("No se puede encontrar la pagina solicitada")
+	return render(request, "usuarios/tablausuarios.html",{})
 
 def agregar_usuario(request):
 	if request.method == "POST":

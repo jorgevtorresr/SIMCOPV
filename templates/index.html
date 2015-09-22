@@ -63,15 +63,15 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						{% if usuario.is_authenticated %}
 						<li>
 						<a href="{% url 'base' %}">
-						<span class="glyphicon glyphicon-home icn_pos hm1" aria-hidden="true"></span><br>
+						<i class="glyphicon glyphicon-home icn_pos hm1" aria-hidden="true"></i><br>
 						{{usuario}}
 						</a>
 						</li>
 						{% else %}
 						<li>
 						<a href="{% url 'auth' %}">
-						<span class="glyphicon glyphicon-home icn_pos hm1" aria-hidden="true"></span><br>
-						Iniciar Sesión
+						<i class="glyphicon glyphicon-home icn_pos hm1" aria-hidden="true"></i><br>
+						<span>Iniciar Sesión</span>
 						</a>
 						</li>
 						{% endif %}

@@ -26,5 +26,50 @@
   </div>
 {% endblock sidebar %}
 {% block content %}
-	
+	<div class="row">
+   <div class="col-xs-3">
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <form id="grupo" action="" method="get" role="form">
+         <ul class="nav nav-pills nav-stacked">
+            <li role="presentation" class="active"><a href="#1">Jefes Inmediatos</a></li>
+             <li role="presentation"><a href="#2">Secretaria</a></li> 
+             <li role="presentation"><a href="#3">Usuarios</a></li> 
+             <li role="presentation"><a href="#4">Gerente y Encargados</a></li> 
+             <li role="presentation"><a href="#5">Jefe Talento y Encargados</a></li>
+             <input id="id_grupo" type="hidden" value="1" name="grupo">
+         </ul>
+        </form>
+      </div>
+    </div>
+   </div>
+   <div class="col-xs-9">
+     <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h4>Lista de Usuarios</h4>
+        </div>
+       <div class="panel-body" id="content-table"> 
+       </div>
+     </div>
+   </div>
+  </div>
 {% endblock content %}
+{% block javascript %}
+  {{block.super}}
+  <script>
+  $(document).on("ready",function(){
+    function ajaxfy(id){
+      $.ajax({
+          type:"GET",
+          url: "/usuarios/registrar/asignar-roles/grupo/"+id+"/",
+          data: $("form#grupo").serialize(),
+          content: $("form#grupo"),
+          success: function(data, status){
+            $("div#content-table").html(data);
+          }
+      });
+    }
+    ajaxfy(1);
+  });
+  </script>
+{% endblock javascript %}
