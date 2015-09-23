@@ -61,7 +61,7 @@
                 <!-- Menu Toggle Button -->
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <!-- The user image in the navbar-->
-                  {% if usuario.username == "admin" %}
+                  {% if usuario.is_superuser %}
                     <img src="{% static "img/user2-160x160.jpg" %}" class="user-image" alt="User Image" />
                   {% else %}
                     <img src="{{usuario.persona.foto.url}}" class="user-image" alt="User Image" />
@@ -72,7 +72,7 @@
                 <ul class="dropdown-menu">
                   <!-- The user image in the menu -->
                   <li class="user-header">
-                    {% if usuario.username == "admin" %}
+                    {% if usuario.is_superuser %}
                       <img src="{% static "img/user2-160x160.jpg" %}" class="img-circle" alt="User Image" />
                     {% else %}
                       <img src="{{usuario.persona.foto.url}}" class="img-circle" alt="User Image" />
@@ -110,7 +110,7 @@
           <!-- Sidebar user panel (optional) -->
           <div class="user-panel">
             <div class="pull-left image">
-              {% if usuario.username == "admin" %}
+              {% if usuario.is_superuser %}
                 <img src="{% static "img/user2-160x160.jpg" %}" class="img-circle" alt="User Image" />
               {% else %}
                 <img src="{{usuario.persona.foto.url}}" class="img-circle" alt="User Image" />
@@ -133,8 +133,9 @@
             </div>
           </form>
           <!-- /.search form -->
-          {% block sidebar %}
+          <!-- ################ -->
           <!-- Sidebar Menu -->
+          {% block sidebar %}
           <div id="sid" class="sidebar-nav navbar-collapse">
           <ul class="sidebar-menu nav" id="side-menu">
             <li class="header">Control</li>
@@ -142,6 +143,7 @@
             <li class="active">
               <a href="{% url 'base' %}"><i class='glyphicon glyphicon-dashboard'></i> <span>Inicio</span></a>
             </li>
+            {% if perms.usuarios.registrar_usuarios %}
             <li>
               <a href="#"><i class='glyphicon glyphicon-book'></i><span>Registrar</span>
               <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div>
@@ -152,8 +154,42 @@
                 <li><a href="{% url 'agregarperiodo' %}">Periodos</a></li>
               </ul>
             </li>
-            <li><a href="{% url 'permiso' %}"><i class='glyphicon glyphicon-user'></i> <span>Permisos</span></a></li>
-            <li><a href="#"><i class='glyphicon glyphicon-pencil'></i> <span>Vacaciones</span></a></li>
+            {% endif %}
+            <li>
+              <a href="#"><i class='glyphicon glyphicon-user'></i> <span>Permisos</span>
+              <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div></a>
+              <ul class="nav nav-second-level">
+                {% if perms.usuarios.pedir_permiso %}
+                  <li><a href="{% url 'permiso' %}">Solicitar Permiso</a></li>
+                  <li><a href="#">Ver Permisos</a></li>
+                {% endif %}
+                {% if perms.usuarios.validar_permiso %}
+                  <li><a href="#">Validar Permisos</a></li>
+                {% endif %}
+              </ul>
+            </li>
+            <li><a href="#"><i class='glyphicon glyphicon-pencil'></i> <span>Vacaciones</span>
+            <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div>
+            </a>
+              <ul class="nav nav-second-level">
+                {% if perms.usuarios.crear_vacaciones %}
+                  <li><a href="#">Crear Distributivo Vacaciones</a></li>
+                {% endif %}
+                {% if perms.usuarios.validar_vacaciones %}
+                  <li><a href="#">Validar Vacaciones</a></li>
+                {% endif %}
+                <li><a href="#">Ver Vacaciones</a></li>
+              </ul>
+            </li>
+            <li><a href="#"><i class='glyphicon glyphicon-th'></i> <span>Administración</span>
+            <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div></a>
+              <ul class="nav nav-second-level">
+                {% if perms.usuarios.cambiar_password %}
+                  <li><a href="#">Cambiar Contraseña</a></li>
+                {% endif %}
+              </ul>
+            </li>
+            <li><a href="#"><i class='glyphicon glyphicon-bookmark'></i> <span>Reportes</span></a></li>
             <li><a href="{% url 'config' %}"><i class='glyphicon glyphicon-cog'></i> <span>Configuracion</span></a></li>
           </ul><!-- /.sidebar-menu -->
           </div>
@@ -161,7 +197,6 @@
         </section>
         <!-- /.sidebar -->
       </aside>
-
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->

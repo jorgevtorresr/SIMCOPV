@@ -5,7 +5,7 @@ import json
 from datetime import datetime
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.storage import default_storage
@@ -60,6 +60,8 @@ def creacionderoles():
 	jefesdetalento.permissions.clear()
 	jefesdetalento.permissions = (validarvacaciones, validarpermiso, registrarusuarios, cambiarpassword, pedirpermiso)
 
+@login_required
+@user_passes_test(lambda u: u.groups.filter(name='Secretarias').count() == 0)
 def asignar_roles(request):
 	creacionderoles()
 	if request.is_ajax():

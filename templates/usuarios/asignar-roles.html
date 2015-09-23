@@ -8,31 +8,6 @@
   }
   </style>
 {% endblock css %}
-{% block sidebar %}
-      <!-- Sidebar Menu -->
-  <div id="sid" class="sidebar-nav navbar-collapse">
-  <ul class="sidebar-menu nav" id="side-menu">
-    <li class="header">Control</li>
-    <!-- Optionally, you can add icons to the links -->
-    <li>
-      <a href="{% url 'base' %}"><i class='glyphicon glyphicon-dashboard'></i> <span>Inicio</span></a>
-    </li>
-    <li class="active">
-      <a href="#"><i class='glyphicon glyphicon-book'></i><span>Registrar</span>
-      <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div>
-      </a>
-      <ul class="nav nav-second-level">
-        <li><a href="{% url 'agregarusuario' %}">Usuarios</a></li>
-        <li><a href="{% url 'asignarroles' %}">Roles</a></li>
-        <li><a href="{% url 'agregarperiodo' %}">Periodos</a></li>
-      </ul>
-    </li>
-    <li><a href="{% url 'permiso' %}"><i class='glyphicon glyphicon-user'></i> <span>Permisos</span></a></li>
-    <li><a href="#"><i class='glyphicon glyphicon-pencil'></i> <span>Vacaciones</span></a></li>
-    <li><a href="{% url 'config' %}"><i class='glyphicon glyphicon-cog'></i> <span>Configuracion</span></a></li>
-  </ul><!-- /.sidebar-menu -->
-  </div>
-{% endblock sidebar %}
 {% block content %}
   <div class="text-center">
     <h4>Asignar Roles</h4>
