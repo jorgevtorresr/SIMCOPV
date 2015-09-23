@@ -9,8 +9,16 @@
   </style>
 {% endblock css %}
 {% block content %}
-  <div class="text-center">
-    <h4>Asignar Roles</h4>
+  <div class="row">
+    <div class="col-xs-12"> 
+      <div class="text-center">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4>Asignar Roles</h4>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   {% if messages %}
     {% for message in messages %}
@@ -138,7 +146,7 @@
         headers: { "X-CSRFToken": csrftoken }
     });
   });
-  // JQery normal functions
+  // JQuery normal functions
   $(document).on("ready",function(){
     $("form#form-search").on("submit",function(event){
       event.preventDefault();
@@ -169,41 +177,41 @@
       });
     }
     ajaxfy(1);
-    $("div.panel-heading h4").text("Lista de Jefes Inmediatos");
+    $("div.col-xs-9 div.panel-heading h4").text("Lista de Jefes Inmediatos");
     $("a[href=\"#1\"]").on("click",function(){
       $("input#id_grupo").val("1");
       ajaxfy(1);
       $(this).parent().siblings().removeClass("active");
       $(this).parent().addClass("active");
-      $("div.panel-heading h4").text("Lista de Jefes Inmediatos");
+      $("div.col-xs-9 div.panel-heading h4").text("Lista de Jefes Inmediatos");
     });
     $("a[href=\"#2\"]").on("click",function(){
       $("input#id_grupo").val("2");
       ajaxfy(2);
       $(this).parent().siblings().removeClass("active");
       $(this).parent().addClass("active");
-      $("div.panel-heading h4").text("Lista de Secretarias");
+      $("div.col-xs-9 div.panel-heading h4").text("Lista de Secretarias");
     });
     $("a[href=\"#3\"]").on("click",function(){
       $("input#id_grupo").val("3");
       ajaxfy(3);
       $(this).parent().siblings().removeClass("active");
       $(this).parent().addClass("active");
-      $("div.panel-heading h4").text("Lista de Usuarios");
+      $("div.col-xs-9 div.panel-heading h4").text("Lista de Usuarios");
     });
     $("a[href=\"#4\"]").on("click",function(){
       $("input#id_grupo").val("4");
       ajaxfy(4);
       $(this).parent().siblings().removeClass("active");
       $(this).parent().addClass("active");
-      $("div.panel-heading h4").text("Lista de Gerente y Encargados");
+      $("div.col-xs-9 div.panel-heading h4").text("Lista de Gerente y Encargados");
     });
     $("a[href=\"#5\"]").on("click",function(){
       $("input#id_grupo").val("5");
       ajaxfy(5);
       $(this).parent().siblings().removeClass("active");
       $(this).parent().addClass("active");
-      $("div.panel-heading h4").text("Lista de Jefe Talento Humano y Encargados");
+      $("div.col-xs-9 div.panel-heading h4").text("Lista de Jefe Talento Humano y Encargados");
     });
     $('#usuarios').on('hidden.bs.modal', function () {
       clean();

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
@@ -36,8 +37,12 @@ class Unidad(models.Model):
 class Persona(models.Model):
 	puesto = models.CharField(max_length=25)
 	unidad = models.ForeignKey('Unidad')
-	foto = models.ImageField(upload_to="profile-pics/", default='profile-pics/image-default.png', 
-		blank=True, null=True)
+	TIPOS_DE_USUARIOS = (
+		("LOSEP","LOSEP"),
+		("Codigo de Trabajo","Codigo de Trabajo"),
+	)
+	tipo = models.CharField(default="LOSEP",choices=TIPOS_DE_USUARIOS, max_length=50)
+	foto = models.ImageField(upload_to="profile-pics/", default='profile-pics/image-default.png',blank=True, null=True)
 	usuario = models.OneToOneField(User)
 	
 	def __unicode__(self):

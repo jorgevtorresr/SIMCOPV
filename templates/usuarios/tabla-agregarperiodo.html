@@ -1,0 +1,27 @@
+<table class="table table-bordered table-responsive text-center">
+ <thead>
+   <tr>
+    <th>Seleccionar</th>
+     <th>Cédula</th>
+     <th>Nombre</th>
+     <th>Apellido</th>
+    <th>Puesto</th>
+     <th>Unidad</th>
+   </tr>
+ </thead>
+ <tbody>
+    {% for user in usuarios %}
+    <tr>
+      <td style="width: 3px">
+        <input type="checkbox" name="seleccionado">
+      </td>
+      <td class="hidden">{{user.id}}</td>
+      <td>{{user.username}}</td>
+      <td>{{user.first_name}}</td>
+      <td>{{user.last_name}}</td>
+      <td>{{user.persona.puesto}}</td>
+      <td>{{user.persona.unidad}}</td>
+    </tr>
+    {% endfor %}
+ </tbody>
+</table>

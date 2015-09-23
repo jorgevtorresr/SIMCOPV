@@ -4,31 +4,86 @@
 {% endblock title %}
 {% block css %}
 	{{block.super}}
-	<style>
-		table.table{
-			background-color: #2dfcb2;
-		}
-		table.table tr:hover{
-			cursor:pointer;
-		}
-	</style>
 {% endblock css %}
 {% block content %}
-	<h3 class="text-center">Lista de Usuarios</h3>
-	<table class="table table-bordered table-hover">
-		<thead>
-			<tr>
-				<th>1</th>
-				<th>2</th>
-				<th>3</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>1</td>
-				<td>2</td>
-				<td>3</td>
-			</tr>
-		</tbody>
-	</table>
+	<h3 class="text-center">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Lista de Usuarios
+		</div>
+	</div>
+	</h3>
+	<div class="panel panel-primary">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-xs-7">
+						<form id="tipos" action="" method="get" role="form">
+				         <ul class="nav nav-tabs">
+				            <li role="presentation" class="active"><a href="#1">LOSEP</a></li>
+				             <li role="presentation"><a href="#2">Código de Trabajo</a></li>
+				             <input id="id_tipo" type="hidden" value="LOSEP" name="tipo">
+				         </ul>
+				        </form>
+				</div>
+				<div class="col-xs-5">
+					<div class="pull-right">
+						<form action="" class="form-inline" method="post" role="form">
+							{% csrf_token %}
+							<div class="form-group">
+								<input type="text" value="{{fecha}}" readonly="readonly" class="form-control">
+							</div>
+							<div class="form-group">
+								<button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-plus"></span> Agregar Periodo</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-xs-12">
+					<div id="users" class="table-responsive">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock content %}
+{% block javascript %}
+	{{block.super}}
+	<script>
+		$(document).ready(function(){
+			$("a[href=\"#1\"]").on("click",function(){
+				$(this).parent().siblings().removeClass("active");
+				$(this).parent().addClass("active");
+				$("input#id_tipo").val("LOSEP");
+				$("form#tipos").submit();
+			});
+			$("a[href=\"#2\"]").on("click",function(){
+				$(this).parent().siblings().removeClass("active");
+				$(this).parent().addClass("active");
+				$("input#id_tipo").val("Codigo de Trabajo");
+				$("form#tipos").submit();
+			});
+			$("form#tipos").on("submit",function(event){
+				event.preventDefault();
+				ajaxify();
+				return false;
+			});
+			ajaxify();
+			function ajaxify(){
+				$.ajax({
+					type: "GET",
+					url: "{% url 'tabla_tipo' %}",
+					data: $("form#tipos").serialize(),
+					success: function(data,status){
+						$("div#users").html(data);
+					},
+					error: function(xhr,errmsg,err){
+			          alert(xhr.status + ": " + xhr.responseText);
+			        }
+				});
+			}
+		});
+	</script>
+{% endblock javascript %}

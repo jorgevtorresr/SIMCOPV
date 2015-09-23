@@ -8,6 +8,7 @@ class PersonaForm(forms.ModelForm):
 		self.fields['nombre'].widget.attrs.update({'class':'form-control'})
 		self.fields['apellido'].widget.attrs.update({'class':'form-control'})
 		self.fields['puesto'].widget.attrs.update({'class':'form-control'})
+		self.fields['tipo'].widget.attrs.update({'class':'form-control'})
 		self.fields['unidad'].widget.attrs.update({'class':'form-control'})
 		self.fields['foto'].widget.attrs.update({'class':'form-control'})
 		self.fields['email'].widget.attrs.update({'class':'form-control'})
@@ -21,7 +22,7 @@ class PersonaForm(forms.ModelForm):
 
 	class Meta:
 		model = Persona
-		fields = ("cedula","nombre","apellido","puesto","password","unidad","foto","email")
+		fields = ("cedula","nombre","apellido","puesto","password","tipo","unidad","foto","email")
 
 class UnidadForm(forms.ModelForm):
 	def __init__ (self, *args, **kwargs):

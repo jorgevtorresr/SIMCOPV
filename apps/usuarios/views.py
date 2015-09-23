@@ -16,8 +16,7 @@ from django.template import Context
 from rest_framework import viewsets
 from .models import Persona, TipoNotificacion, Periodo, Notificacion, Unidad, GlobalPermission
 from .forms import PersonaForm, LoginForm, UnidadForm, FrontImages
-from .serializers import (UserSerializer, PersonaSerializer, TipoNotificacionSerializer, 
-	NotificacionSerializer, PeriodoSerializer)
+from .serializers import (UserSerializer, PersonaSerializer, TipoNotificacionSerializer, NotificacionSerializer, PeriodoSerializer)
 
 # Create your views here.
 def index(request):
@@ -33,6 +32,13 @@ def base(request):
 	if usuario.check_password(usuario.username):
 		return HttpResponseRedirect("/usuarios/cuenta/change_password/")
 	return render(request,'base.html',{})
+
+def agregar_periodo(request):	
+	fecha = "pos nose"
+	return render(request, "usuarios/agregarperiodo.html",{"fecha":fecha})
+
+def agregar_periodoporusuario(request):
+	return render(request,"usuarios/agregarperiodoporusuario.html",{})
 
 def creacionderoles():
 	# Creación de Grupos para el sistema
@@ -149,8 +155,13 @@ def agregar_usuario(request):
 		form_unidad = UnidadForm()
 	return render(request, 'usuarios/agregarusuario.html',{"form":form,"form_unidad":form_unidad})
 
-def agregar_periodo(request):	
-	return render(request, "usuarios/agregarperiodo.html",{})
+def ajax_tabla_agregarperiodo(request):
+	if request.is_ajax():
+		tipo = request.GET.get("tipo","")
+		usuarios = User.objects.filter(persona__tipo=tipo)
+		print usuarios
+	return render(request,"usuarios/tabla-agregarperiodo.html",{"usuarios":usuarios})
+
 
 @login_required
 def change_password(request):
