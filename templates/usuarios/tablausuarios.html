@@ -12,9 +12,10 @@
  <tbody>
     {% for user in usuarios %}
     <tr>
-      <td style="width: 3px"><button class="btn btn-xs btn-danger eliminar">
+      <td style="width: 3px"><a href="#eliminar" class="btn btn-xs btn-danger eliminar" data-toggle="modal">
       <span class="glyphicon glyphicon-remove"></span>
-      </button></td>
+      </a></td>
+      <td class="hidden">{{user.id}}</td>
       <td>{{user.username}}</td>
       <td>{{user.first_name}}</td>
       <td>{{user.last_name}}</td>

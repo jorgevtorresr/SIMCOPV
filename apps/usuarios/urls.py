@@ -9,5 +9,6 @@ urlpatterns = patterns('',
     url(r'^cuenta/login/$', 'apps.usuarios.views.autenticacion', name='auth'),
     url(r'^cuenta/logout/$', 'apps.usuarios.views.auth_logout', name='logout'),
     url(r'^cuenta/change_password/$', 'apps.usuarios.views.change_password', name='change_password'),
+    url(r'^registrar/asignar-roles/usuario-search/$', 'apps.usuarios.views.ajax_usuario_search', name='usuario_search'),
     url(r'^registrar/asignar-roles/grupo/(\d+)/$', 'apps.usuarios.views.ajax_table_usuarios', name="tabla_grupo"),
 )

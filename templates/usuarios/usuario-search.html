@@ -1,0 +1,21 @@
+<thead>
+	<tr>
+		<th>Cédula</th>
+		<th>Nombre</th>
+		<th>Apellido</th>
+		<th>Puesto</th>
+		<th>Unidad</th>
+	</tr>
+</thead>
+<tbody>
+	{% for usuario in ajax %}
+	<tr class="usuario-row">
+		<td class="hidden">{{usuario.id}}</td>
+		<td>{{usuario.username}}</td>
+		<td>{{usuario.first_name}}</td>
+		<td>{{usuario.last_name}}</td>
+		<td>{{usuario.persona.puesto}}</td>
+		<td>{{usuario.persona.unidad}}</td>
+	</tr>
+	{% endfor %}
+</tbody>

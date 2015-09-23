@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
+{% block css %}
+  {{block.super}}
+  <style>
+  #table-search > tbody > tr.active td{
+      background-color: #e5e5e5;
+  }
+  </style>
+{% endblock css %}
 {% block sidebar %}
       <!-- Sidebar Menu -->
   <div id="sid" class="sidebar-nav navbar-collapse">
@@ -26,6 +34,29 @@
   </div>
 {% endblock sidebar %}
 {% block content %}
+  <div class="text-center">
+    <h4>Asignar Roles</h4>
+  </div>
+  {% if messages %}
+    {% for message in messages %}
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+      <div class="alert alert-danger">  
+      {% endif %}
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+      <div class="alert alert-success"> 
+      {% endif %}
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+      <div class="alert alert-warning"> 
+      {% endif %}
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+      <div class="alert alert-info">  
+      {% endif %}
+      <button class="close" data-dismiss="alert"><span>&times;</span></button>
+        <strong>Alerta!</strong> {{message}}  
+      </div>
+      {% endfor %}
+  {% endif %}
+  <br>
 	<div class="row">
    <div class="col-xs-3">
     <div class="panel panel-primary">
@@ -49,7 +80,9 @@
           <h4 style="display:inline-block">Lista de Usuarios</h4>
           <a href="#usuarios" data-toggle="modal" class="btn btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Agregar Usuario</a>
         </div>
-       <div class="panel-body" id="content-table"> 
+       <div class="panel-body"> 
+        <div class="table-responsive" id="content-table">
+        </div>
        </div>
      </div>
    </div>
@@ -61,11 +94,45 @@
           <h4>Agregar Usuario</h4>
         </div>
         <div class="modal-body">
-          <h3>Nothing yet</h3>
+          <form id="form-search" action="" method="get">
+            <div class="form-group">
+              <label for="id_search">Buscar:</label>
+              <div class="input-group">
+                <input id="id_search" type="text" class="form-control" placeholder="Cedula o Apellido" name="buscar">
+                <span class="input-group-btn">
+                <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+              </div>
+            </div>
+          </form>
+          <div class="table-responsive">
+            <table id="table-search" class="table table-bordered"></table>
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-default" data-dismiss="modal" value="cancelar">Cancelar</button>
-          <button type="submit" class="btn btn-info">Agregar Usuario</button>
+          <button id="aceptar-search" class="btn btn-info" data-dismiss="modal">Agregar Usuario</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="eliminar">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Dar de Baja</h4>
+        </div>
+        <div class="modal-body">
+          ¿Esta seguro que desea quitar este usuario del rol seleccionado?
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <form action="" method="post" style="display: inline-block">
+            {% csrf_token %}
+            <input type="hidden" id="idusuarioeliminar" name="idusuarioeliminar">
+            <input type="hidden" id="idgrupo" name="idgrupo">
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+          </form>
         </div>
       </div>
     </div>
@@ -74,7 +141,47 @@
 {% block javascript %}
   {{block.super}}
   <script>
+  // Function that binds csrf_token to every ajax request
+  $(function () {
+    function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+          }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": csrftoken }
+    });
+  });
+  // JQery normal functions
   $(document).on("ready",function(){
+    $("form#form-search").on("submit",function(event){
+      event.preventDefault();
+      $.ajax({
+        type: "GET",
+        url: "{% url 'usuario_search' %}",
+        data: $("form#form-search").serialize(),
+        content: $("form#form-search"),
+        success: function(data, status){
+          $("table#table-search").html(data);
+        },
+        error: function(xhr,errmsg,err){
+          alert(xhr.status + ": " + xhr.responseText);
+        }
+      });
+      return false;
+    });
+    var usuarios = [];
     function ajaxfy(id){
       $.ajax({
           type:"GET",
@@ -122,6 +229,40 @@
       $(this).parent().siblings().removeClass("active");
       $(this).parent().addClass("active");
       $("div.panel-heading h4").text("Lista de Jefe Talento Humano y Encargados");
+    });
+    $('#usuarios').on('hidden.bs.modal', function () {
+      clean();
+      usuarios = [];
+    });
+    function clean(){
+      $('#table-search').html("");
+      $('#id_search').val("");
+    }
+    $("table#table-search").on('click','.usuario-row',function(){
+      $(this).addClass("active");
+      addList($(this).children("td.hidden").text());
+    });
+    function addList(usuario){
+      usuarios.push(usuario);
+    }
+    $("button#aceptar-search").on("click",function(){
+      var grupoid = $("input#id_grupo").val();
+      $.ajax({
+        type: "POST",
+        url: "{% url 'asignarroles' %}",
+        data: {lista:usuarios,grupoid:grupoid},
+        success: function(){
+          ajaxfy(grupoid);
+        },
+        error: function(xhr,errmsg,err){
+          alert(xhr.status + ": " + xhr.responseText);
+        }
+      });
+    });
+    $("div#content-table").on("click","a[href=\"#eliminar\"]",function(){
+      var bitch = $(this).parent().siblings(".hidden").text();
+      $("input#idusuarioeliminar").val(bitch);
+      $("input#idgrupo").val($("input#id_grupo").val());
     });
   });
   </script>

@@ -62,6 +62,22 @@ def creacionderoles():
 
 def asignar_roles(request):
 	creacionderoles()
+	if request.is_ajax():
+		if request.method == "POST":
+			lista = request.POST.getlist("lista[]","")
+			grupoid = request.POST.get("grupoid","")
+			grupo = Group.objects.get(pk=int(grupoid))
+			for id in lista:
+				user = User.objects.get(pk=int(id))
+				grupo.user_set.add(user)
+	if request.method == "POST":
+		idusuario = request.POST.get("idusuarioeliminar","")
+		idgrupo = request.POST.get("idgrupo","")
+		if idusuario != "" and idgrupo != "":
+			usuario = User.objects.get(pk=int(idusuario))
+			grupo = Group.objects.get(pk=int(idgrupo))
+			grupo.user_set.remove(usuario)
+			messages.success(request,"Usuario Eliminado Correctamente")
 	return render(request, "usuarios/asignar-roles.html",{})
 
 def ajax_table_usuarios(request,id):
@@ -74,6 +90,17 @@ def ajax_table_usuarios(request,id):
 		except:
 			raise Http404("No se puede encontrar la pagina solicitada")
 	return render(request, "usuarios/tablausuarios.html",{})
+
+def ajax_usuario_search(request):
+	if request.is_ajax():
+		query = request.GET.get("buscar","")
+		ajax = User.objects.filter(last_name__icontains=query,is_superuser=False)
+		try:
+			if ajax.__len__() <= 0 and query.__len__() > 0:
+				ajax = User.objects.filter(username__exact=query)	
+		except:
+			pass
+	return render(request,"usuarios/usuario-search.html",{"ajax":ajax})
 
 def agregar_usuario(request):
 	if request.method == "POST":
