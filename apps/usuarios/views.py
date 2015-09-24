@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import json
+import datetime as dt
 from datetime import datetime
 from django.conf import settings
 from django.contrib import messages
@@ -9,6 +10,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.storage import default_storage
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import get_template
@@ -34,7 +36,19 @@ def base(request):
 	return render(request,'base.html',{})
 
 def agregar_periodo(request):	
-	fecha = "pos nose"
+	if request.method == "POST":
+		year = request.POST.get("fecha","")
+		lista = request.POST.get("lista","")
+		lista = lista.split(",")
+		usuarios = [];
+		for user in lista:
+			tmp = User.objects.get(pk=int(user))
+			if tmp.persona.tipo == "LOSEP":
+				periodo = Periodo(anio_periodo=year,dias_fijo=30,dias_vac=30,horas_vac=dt.time(0),usuario=tmp)
+				periodo.save()
+		messages.success(request,"Periodo Agregado con exito")
+		return HttpResponseRedirect(".")
+	fecha = datetime.now().year + 1
 	return render(request, "usuarios/agregarperiodo.html",{"fecha":fecha})
 
 def agregar_periodoporusuario(request):
@@ -158,8 +172,8 @@ def agregar_usuario(request):
 def ajax_tabla_agregarperiodo(request):
 	if request.is_ajax():
 		tipo = request.GET.get("tipo","")
-		usuarios = User.objects.filter(persona__tipo=tipo)
-		print usuarios
+		fecha = datetime.now().year + 1
+		usuarios = User.objects.filter(~Q(periodo__anio_periodo=fecha),persona__tipo=tipo)
 	return render(request,"usuarios/tabla-agregarperiodo.html",{"usuarios":usuarios})
 
 

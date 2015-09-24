@@ -58,8 +58,11 @@ class Notificacion(models.Model):
 	tiponotif = models.ForeignKey('TipoNotificacion')
 
 class Periodo(models.Model):
-	anio_inicio = models.CharField(max_length=4)
-	anio_fin = models.CharField(max_length=4)
+	anio_periodo = models.CharField(max_length=4)
+	dias_fijo = models.IntegerField(default=30)
 	dias_vac = models.IntegerField()
 	horas_vac = models.TimeField()
 	usuario = models.ForeignKey(User)
+
+	def __unicode__(self):
+		return "{0}-{1}".format(self.anio_periodo,self.usuario.username)
