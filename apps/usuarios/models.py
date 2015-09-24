@@ -63,6 +63,6 @@ class Periodo(models.Model):
 	dias_vac = models.IntegerField()
 	horas_vac = models.TimeField()
 	usuario = models.ForeignKey(User)
-
+	
 	def __unicode__(self):
 		return "{0}-{1}".format(self.anio_periodo,self.usuario.username)

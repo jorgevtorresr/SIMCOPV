@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.storage import default_storage
-from django.db.models import Q
+from django.db.models import Q, F, Max
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import get_template
@@ -41,13 +41,20 @@ def agregar_periodo(request):
 		lista = request.POST.get("lista","")
 		lista = lista.split(",")
 		usuarios = [];
-		for user in lista:
-			tmp = User.objects.get(pk=int(user))
-			if tmp.persona.tipo == "LOSEP":
-				periodo = Periodo(anio_periodo=year,dias_fijo=30,dias_vac=30,horas_vac=dt.time(0),usuario=tmp)
-				periodo.save()
-		messages.success(request,"Periodo Agregado con exito")
-		return HttpResponseRedirect(".")
+		if lista[0] == "":
+			messages.warning(request, "Seleccione al menos un usuario")
+		else:
+			for user in lista:
+				tmp = User.objects.get(pk=int(user))
+				if tmp.persona.tipo == "LOSEP":
+					periodo = Periodo(anio_periodo=year,dias_fijo=30,dias_vac=30,horas_vac=dt.time(0),usuario=tmp)
+					periodo.save()
+				else:
+					periodos = Periodo.objects.filter(usuario=tmp)
+					periodomax = periodos.annotate(max=Max('anio_periodo')).filter(anio_periodo=F('max'))
+					print periodomax
+			messages.success(request,"Periodo Agregado con exito")
+			return HttpResponseRedirect(".")
 	fecha = datetime.now().year + 1
 	return render(request, "usuarios/agregarperiodo.html",{"fecha":fecha})
 
@@ -144,6 +151,7 @@ def agregar_usuario(request):
 				password = form.cleaned_data["password"]
 				unidad = form.cleaned_data["unidad"]
 				puesto = form.cleaned_data["puesto"]
+				tipo = form.cleaned_data["tipo"]
 				foto = form.cleaned_data["foto"]
 				if verificar(cedula):
 					existe = True
@@ -156,7 +164,7 @@ def agregar_usuario(request):
 					else:
 						usuario = User.objects.create_user(username=cedula, first_name=nombre, last_name=apellido, email=email,password=password)
 						if usuario != None:
-							persona = Persona(usuario = usuario,puesto = puesto,unidad = unidad, foto=foto)
+							persona = Persona(usuario = usuario,puesto = puesto,unidad = unidad, foto=foto,tipo=tipo)
 							persona.save()
 							messages.add_message(request, messages.SUCCESS, "Usuario Creado Satisfactoriamente")
 						else: 
