@@ -6,6 +6,9 @@
   #table-search > tbody > tr.active td{
       background-color: #e5e5e5;
   }
+  ul#ulside li a{
+    overflow: hidden;
+  }
   </style>
 {% endblock css %}
 {% block content %}
@@ -45,7 +48,7 @@
     <div class="panel panel-primary">
       <div class="panel-body">
         <form id="grupo" action="" method="get" role="form">
-         <ul class="nav nav-pills nav-stacked">
+         <ul id="ulside" class="nav nav-pills nav-stacked">
             <li role="presentation" class="active"><a href="#1">Jefes Inmediatos</a></li>
              <li role="presentation"><a href="#2">Secretarias</a></li> 
              <li role="presentation"><a href="#3">Usuarios</a></li> 

@@ -2,15 +2,23 @@
 {% load static from staticfiles %}
 {% block content %}
 	<div class="row">
-		<div class="col-xs-12">
-      <h3 class="text-center">Imagenes de la Página Principal</h3>
-			<form action="" enctype="multipart/form-data" method="post" class="form" role="form">
-				{% csrf_token %}
-				{{form}}
-				<br>
-				<button class="btn btn-info" type="input">Actualizar</button>
-			</form>
+    <div class="col-md-2 hidden-xs hidden-sm">    
+    </div>
+		<div class="col-xs-12 col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h3 class="text-center">Imagenes de la Página Principal</h3>
+    			<form action="" enctype="multipart/form-data" method="post" class="form" role="form">
+    				{% csrf_token %}
+    				{{form}}
+    				<br>
+    				<button class="btn btn-info" type="input">Actualizar</button>
+    			</form>
+        </div>
+      </div>
 		</div>
+    <div class="col-md-2 hidden-xs hidden-sm">    
+    </div>
 	</div>
   <br>
   {% if men %}

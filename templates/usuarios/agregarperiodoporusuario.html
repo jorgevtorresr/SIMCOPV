@@ -7,4 +7,48 @@
 		</div>
 	</div>
 	</h3>
+	<div class="row">
+		<div class="col-md-3 hidden-xs hidden-sm">
+		</div>
+		<div class="col-xs-12 col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<form action="" class="form" role="form" method="post">
+						{% csrf_token %}
+						<div class="form-group">
+							<label for="id_{{form.anio_periodo.name}}">Año:</label>
+							{{form.anio_periodo}}
+							{{form.errors.anio_periodo}}
+						</div>
+						<div class="form-group">
+							<label for="id_{{form.dias_fijo.name}}">Días:</label>
+							{{form.dias_fijo}}
+							{{form.errors.dias_fijo}}
+						</div>
+						<div class="form-group">
+							<label for="id_{{form.dias_vac.name}}">Días de Vacaciones:</label>
+							{{form.dias_vac}}
+							{{form.errors.dias_vac}}
+						</div>
+						<div class="form-group">
+							<label for="id_{{form.horas_vac.name}}">Horas de Vacaciones:</label>
+							{{form.horas_vac}}
+							{{form.errors.horas_vac}}
+						</div>
+						<div class="form-group">
+							<label for="id_{{form.usuario.name}}">Usuario:</label>
+							<input type="text" id="usuario_nom" class="form-control">
+							<input type="hidden" name="{{form.usuario.name}}" id="id_{{form.usuario.name}}" value="{{form.usuario.value}}">
+							{{form.errors.usuario}}
+						</div>
+						<div class="form-group">
+							<button class="btn btn-primary" type="submit">Agregar Periodo</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 hidden-xs hidden-sm">
+		</div>
+	</div>
 {% endblock content %}

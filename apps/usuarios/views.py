@@ -17,7 +17,7 @@ from django.template.loader import get_template
 from django.template import Context
 from rest_framework import viewsets
 from .models import Persona, TipoNotificacion, Periodo, Notificacion, Unidad, GlobalPermission
-from .forms import PersonaForm, LoginForm, UnidadForm, FrontImages
+from .forms import PersonaForm, LoginForm, UnidadForm, FrontImages, PeriodoForm
 from .serializers import (UserSerializer, PersonaSerializer, TipoNotificacionSerializer, NotificacionSerializer, PeriodoSerializer)
 
 # Create your views here.
@@ -51,15 +51,30 @@ def agregar_periodo(request):
 					periodo.save()
 				else:
 					periodos = Periodo.objects.filter(usuario=tmp)
-					periodomax = periodos.annotate(max=Max('anio_periodo')).filter(anio_periodo=F('max'))
-					print periodomax
+					max = periodos.aggregate(max=Max('anio_periodo'))
+					periodomax = []
+					try:
+						periodomax = periodos.get(anio_periodo=max["max"])
+					except:
+						pass
+					if periodomax == []:
+						periodo = Periodo(anio_periodo=year,dias_fijo=15,dias_vac=15,horas_vac=dt.time(0),usuario=tmp)
+						periodo.save()
+					else:
+						dias = 30 if periodomax.dias_fijo+1 > 30 else periodomax.dias_fijo+1
+						periodo = Periodo(anio_periodo=year,dias_fijo=dias,dias_vac=dias,horas_vac=dt.time(0),usuario=tmp)
+						periodo.save()
 			messages.success(request,"Periodo Agregado con exito")
 			return HttpResponseRedirect(".")
 	fecha = datetime.now().year + 1
 	return render(request, "usuarios/agregarperiodo.html",{"fecha":fecha})
 
 def agregar_periodoporusuario(request):
-	return render(request,"usuarios/agregarperiodoporusuario.html",{})
+	if request.method == "POST":
+		form = PeriodoForm(request.POST)
+	else:
+		form = PeriodoForm()
+	return render(request,"usuarios/agregarperiodoporusuario.html",{"form":form})
 
 def creacionderoles():
 	# Creación de Grupos para el sistema

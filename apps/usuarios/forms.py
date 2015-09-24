@@ -1,5 +1,5 @@
 from django import forms 
-from .models import Persona, Unidad
+from .models import Persona, Unidad, Periodo
 
 class PersonaForm(forms.ModelForm):
 	def __init__ (self, *args, **kwargs):
@@ -24,6 +24,18 @@ class PersonaForm(forms.ModelForm):
 		model = Persona
 		fields = ("cedula","nombre","apellido","puesto","password","tipo","unidad","foto","email")
 
+class PeriodoForm(forms.ModelForm):
+	def __init__ (self, *args, **kwargs):
+		super(PeriodoForm, self).__init__(*args, **kwargs)
+		self.fields['anio_periodo'].widget.attrs.update({'class':'form-control'})
+		self.fields['dias_fijo'].widget.attrs.update({'class':'form-control'})
+		self.fields['dias_vac'].widget.attrs.update({'class':'form-control'})
+		self.fields['horas_vac'].widget.attrs.update({'class':'form-control'})
+
+	class Meta:
+		model = Periodo
+		fields = ("anio_periodo","dias_fijo","dias_vac","horas_vac","usuario")
+    
 class UnidadForm(forms.ModelForm):
 	def __init__ (self, *args, **kwargs):
 		super(UnidadForm, self).__init__(*args, **kwargs)
