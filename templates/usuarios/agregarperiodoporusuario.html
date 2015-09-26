@@ -13,7 +13,7 @@
 		<div class="col-xs-12 col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<form action="" class="form" role="form" method="post">
+					<form id="agregarperiodo" action="" class="form" role="form" method="post">
 						{% csrf_token %}
 						<div class="form-group">
 							<label for="id_{{form.anio_periodo.name}}">Año:</label>
@@ -102,6 +102,11 @@
 	{{block.super}}
 	<script>
 		$(document).ready(function(){
+			if($("input[name={{form.dias_vac.name}}]").val()==30){
+    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("disabled","disabled");
+    		}else{
+				$("input#id_{{form.horas_vac.name}}").removeAttr("disabled");
+    		}
 			function ajaxify(){
 				$.ajax({
 					type: "GET",
@@ -120,17 +125,23 @@
 				ajaxify();
 				return false;
 			});
+			$("input[name={{form.dias_fijo.name}}]").val("30").attr("readonly","readonly");
 			$("select#id_tipousuario").on("change",function(){
 				$("input[name=tipo]").val($(this).val());
 				$("input#usuario_nom").val("");
 				$("input[name={{form.usuario.name}}]").val("");
 				if ($(this).val()=="LOSEP"){
-					$("input[name={{form.dias_vac.name}}]").val("30");
-					$("input[name={{form.dias_fijo.name}}]").val("30");
+					$("input[name={{form.dias_vac.name}}]").val("30")
+					$("input[name={{form.dias_fijo.name}}]").val("30").attr("readonly","readonly");
 				}else{
 					$("input[name={{form.dias_vac.name}}]").val("15");
-					$("input[name={{form.dias_fijo.name}}]").val("15");
+					$("input[name={{form.dias_fijo.name}}]").val("15").removeAttr("readonly");
 				}
+				if($("input[name={{form.dias_vac.name}}]").val()==30){
+	    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("disabled","disabled");
+	    		}else{
+					$("input#id_{{form.horas_vac.name}}").removeAttr("disabled");
+	    		}
 			});
 			$("#buscar").on("hidden.bs.modal",function(){
 				clean();
@@ -153,8 +164,81 @@
 		    $("button#aceptar-search").on("click",function(){
 		    	$("input#usuario_nom").val(username);
 		    });
-		    $("input[name={{form.dias_fijo.name}}").on("focusout",function(){
-		    	alert("bitch :)");
+		    verificardias("{{form.dias_fijo.name}}");
+		    verificardiasvacaciones("{{form.dias_vac.name}}");
+		    function verificardias(name){
+		    	$("input[name="+name+"]").on("focusout",function(){
+			    	var num = $("input[name="+name+"]").val();
+			    	if (!(parseInt(num) >= 15 && parseInt(num) <= 30)){
+			    		$(this).parent().addClass("has-error");
+			    		if ($("span#"+name).length == 0){
+			    			$(this).parent().append('<span id="'+name+'">Escoja un número entre 15 y 30</span>');
+			    		}
+			    	}else{
+			    		$(this).parent().removeClass("has-error");
+			    		$("span#"+name).remove();
+			    	}
+			    	if($(this).attr("name")=="{{form.dias_vac.name}}"){
+			    		if($(this).val()==30){
+			    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("disabled","disabled");
+			    		}else{
+							$("input#id_{{form.horas_vac.name}}").removeAttr("disabled");
+			    		}
+			    	};
+		    	});	
+		    }
+		    function verificardiasvacaciones(name){
+		    	$("input[name="+name+"]").on("focusout",function(){
+			    	var num = $("input[name="+name+"]").val();
+			    	if (!(parseInt(num) >= 0 && parseInt(num) <= 30)){
+			    		$(this).parent().addClass("has-error");
+			    		if ($("span#"+name).length == 0){
+			    			$(this).parent().append('<span id="'+name+'">Escoja un menor o igual a 30</span>');
+			    		}
+			    	}else{
+			    		$(this).parent().removeClass("has-error");
+			    		$("span#"+name).remove();
+			    	}
+			    	if($(this).attr("name")=="{{form.dias_vac.name}}"){
+			    		if($(this).val()==30){
+			    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("disabled","disabled");
+			    		}else{
+							$("input#id_{{form.horas_vac.name}}").removeAttr("disabled");
+			    		}
+			    	};
+		    	});	
+		    }
+		    $("select#id_{{form.anio_periodo.name}}").on("change",function(){
+		    	var year = new Date().getFullYear()+1;
+		    	if ($(this).val() > year){
+		    		$(this).parent().addClass("has-error");
+		    		if ($("span#error").length == 0){
+			    			$(this).parent().append('<span id="error">Seleccione un año válido antes del '+year+'</span>');
+			    		}
+		    	}else{
+		    		$(this).parent().removeClass("has-error");
+		    		$("span#error").remove();
+		    	}
+		    });
+		    $("form#agregarperiodo").on("submit",function(event){
+		    	num = $("span#{{form.dias_fijo.name}}").length + $("span#{{form.dias_vac.name}}").length + $("span#error").length;
+		    	if(num > 0){
+		    		event.preventDefault();
+		    		if($("div#formerror").length == 0){
+		    			$(this).append('<div id="formerror" class="alert alert-danger"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>Alerta!<strong> Corrija los errores antes de ingresar el Periodo</div>');
+		    		}
+		    	}else{
+		    		$("div#formerror").remove();
+		    	}	
+		    });
+		    $("input[name={{form.dias_vac.name}}]").on("focusout",function(){
+		    	fijos = $("input[name={{form.dias_fijo.name}}]").val();
+		    	vacaciones = $("input[name={{form.dias_vac.name}}]").val();
+		    	if (parseInt(vacaciones) > parseInt(fijos)){
+		    		$(this).parent().addClass("has-error");
+		    	}else{
+					$(this).parent().removeClass("has-error");
+		    	}
 		    });
 		});
 	</script>
