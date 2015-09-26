@@ -10,18 +10,26 @@
    </tr>
  </thead>
  <tbody>
-    {% for user in usuarios %}
-    <tr class="clickable-row">
-      <td style="width: 3px">
-        <input type="checkbox" name="seleccionado">
+    {% if usuarios|length > 0 %}
+      {% for user in usuarios %}
+      <tr class="clickable-row">
+        <td style="width: 3px">
+          <input type="checkbox" name="seleccionado">
+        </td>
+        <td class="hidden">{{user.id}}</td>
+        <td>{{user.username}}</td>
+        <td>{{user.first_name}}</td>
+        <td>{{user.last_name}}</td>
+        <td>{{user.persona.puesto}}</td>
+        <td>{{user.persona.unidad}}</td>
+      </tr>
+      {% endfor %}
+    {% else %}
+    <tr>
+      <td colspan="7">
+      No existen mas Usuarios a los que añadir el periodo actual
       </td>
-      <td class="hidden">{{user.id}}</td>
-      <td>{{user.username}}</td>
-      <td>{{user.first_name}}</td>
-      <td>{{user.last_name}}</td>
-      <td>{{user.persona.puesto}}</td>
-      <td>{{user.persona.unidad}}</td>
     </tr>
-    {% endfor %}
+  {% endif %}
  </tbody>
 </table>

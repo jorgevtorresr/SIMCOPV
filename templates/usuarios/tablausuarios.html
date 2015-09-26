@@ -10,6 +10,7 @@
    </tr>
  </thead>
  <tbody>
+  {% if usuarios|length > 0 %}
     {% for user in usuarios %}
     <tr>
       <td style="width: 3px"><a href="#eliminar" class="btn btn-xs btn-danger eliminar" data-toggle="modal">
@@ -23,5 +24,12 @@
       <td>{{user.persona.unidad}}</td>
     </tr>
     {% endfor %}
+  {% else %}
+    <tr>
+      <td colspan="7">
+        Actualmente no hay usuarios que posean este rol
+      </td>
+    </tr>
+  {% endif %}
  </tbody>
 </table>

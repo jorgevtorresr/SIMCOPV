@@ -59,7 +59,7 @@ class Notificacion(models.Model):
 class Periodo(models.Model):
 	anio_periodo = models.CharField(max_length=4)
 	dias_fijo = models.IntegerField(default=30)
-	dias_vac = models.IntegerField()
+	dias_vac = models.IntegerField(default=30)
 	horas_vac = models.TimeField()
 	usuario = models.ForeignKey(User)
 	

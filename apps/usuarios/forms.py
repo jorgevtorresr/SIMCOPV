@@ -31,7 +31,7 @@ class PeriodoForm(forms.ModelForm):
 		self.fields['dias_fijo'].widget.attrs.update({'class':'form-control'})
 		self.fields['dias_vac'].widget.attrs.update({'class':'form-control'})
 		self.fields['horas_vac'].widget.attrs.update({'class':'form-control'})
-
+		
 	class Meta:
 		model = Periodo
 		fields = ("anio_periodo","dias_fijo","dias_vac","horas_vac","usuario")

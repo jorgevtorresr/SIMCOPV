@@ -17,27 +17,43 @@
 						{% csrf_token %}
 						<div class="form-group">
 							<label for="id_{{form.anio_periodo.name}}">Año:</label>
-							{{form.anio_periodo}}
+							<select name="{{form.anio_periodo.name}}" id="id_{{form.anio_periodo.name}}" class="form-control">
+								{% for anio in years %}
+									<option value="{{anio}}">{{anio}}</option>
+								{% endfor %}
+							</select>
 							{{form.errors.anio_periodo}}
 						</div>
 						<div class="form-group">
-							<label for="id_{{form.dias_fijo.name}}">Días:</label>
+							<label for="id_{{form.dias_fijo.name}}">Días de Vacaciones:</label>
 							{{form.dias_fijo}}
 							{{form.errors.dias_fijo}}
 						</div>
 						<div class="form-group">
-							<label for="id_{{form.dias_vac.name}}">Días de Vacaciones:</label>
+							<label for="id_{{form.dias_vac.name}}">Días Restantes:</label>
 							{{form.dias_vac}}
 							{{form.errors.dias_vac}}
 						</div>
 						<div class="form-group">
 							<label for="id_{{form.horas_vac.name}}">Horas de Vacaciones:</label>
-							{{form.horas_vac}}
+							<input type="time" name="{{form.horas_vac.name}}" id="id_{{form.horas_vac.name}}" value="{{form.horas_vac.value|default:'00:00'}}" class="form-control">
 							{{form.errors.horas_vac}}
 						</div>
 						<div class="form-group">
+							<label for="id_tipousuario">Tipo de Usuario:</label>
+							<select name="tipo" id="id_tipousuario" class="form-control">
+								<option value="LOSEP">LOSEP</option>
+								<option value="Codigo de Trabajo">Codigo de Trabajo</option>
+							</select>
+						</div>
+						<div class="form-group">
 							<label for="id_{{form.usuario.name}}">Usuario:</label>
-							<input type="text" id="usuario_nom" class="form-control">
+							<div class="input-group">
+								<input type="text" id="usuario_nom" class="form-control" readonly="readonly">
+								<span class="input-group-btn">
+									<a href="#buscar" class="btn btn-info" data-toggle="modal"><span class="glyphicon glyphicon-search"></span></a>
+								</span>
+							</div>
 							<input type="hidden" name="{{form.usuario.name}}" id="id_{{form.usuario.name}}" value="{{form.usuario.value}}">
 							{{form.errors.usuario}}
 						</div>
@@ -51,4 +67,95 @@
 		<div class="col-md-3 hidden-xs hidden-sm">
 		</div>
 	</div>
+	<div class="modal fade" id="buscar">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4>Seleccionar Usuario</h4>
+				</div>
+				<div class="modal-body">
+					<form action="" id="form-buscar" class="form" method="get">
+						<div class="form-group">
+							<label for="id_search">Buscar:</label>
+							<div class="input-group">
+				               <input id="id_search" type="text" class="form-control" placeholder="Cedula o Apellido" name="buscar">
+				               <input type="hidden" name="tipo" value="LOSEP">
+				               <span class="input-group-btn">
+				                	<button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-search"></span></button>
+				                </span>
+				            </div>
+						</div>
+					</form>
+					<div class="table-responsive">
+						<table id="table-search" class="table table-bordered"></table>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal" value="cancelar">Cancelar</button>
+					<button id="aceptar-search" class="btn btn-info" data-dismiss="modal">Agregar Usuario</button>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock content %}
+{% block javascript %}
+	{{block.super}}
+	<script>
+		$(document).ready(function(){
+			function ajaxify(){
+				$.ajax({
+					type: "GET",
+					url: "{% url 'tabla_usuarios_periodo' %}",
+					data: $("form#form-buscar").serialize(),
+					success: function(data, status){
+						$("table#table-search").html(data);
+					},
+					error: function(xhr,errmsg,err){
+			          alert(xhr.status + ": " + xhr.responseText);
+			        }
+				});
+			}
+			$("form#form-buscar").on("submit",function(event){
+				event.preventDefault();
+				ajaxify();
+				return false;
+			});
+			$("select#id_tipousuario").on("change",function(){
+				$("input[name=tipo]").val($(this).val());
+				$("input#usuario_nom").val("");
+				$("input[name={{form.usuario.name}}]").val("");
+				if ($(this).val()=="LOSEP"){
+					$("input[name={{form.dias_vac.name}}]").val("30");
+					$("input[name={{form.dias_fijo.name}}]").val("30");
+				}else{
+					$("input[name={{form.dias_vac.name}}]").val("15");
+					$("input[name={{form.dias_fijo.name}}]").val("15");
+				}
+			});
+			$("#buscar").on("hidden.bs.modal",function(){
+				clean();
+				username = "";
+			});
+			function clean(){
+		      $('#table-search').html("");
+		      $('#id_search').val("");
+		    }
+		    var username = "";
+		    $("table#table-search").on('click','.usuario-row',function(){
+		    	$(this).siblings().removeClass("active");
+		    	$(this).addClass("active");
+		    	var idusuario = $(this).children("td.hidden").text();
+		    	var ciusuario = $(this).children("td.hidden").next().text();
+		    	var nombreusuario = $(this).children("td.hidden").next().next().text() + " " +  $(this).children("td.hidden").next().next().next().text();
+		    	$("input[name={{form.usuario.name}}]").val(idusuario);
+		    	username = ciusuario + " - " + nombreusuario;
+		    });
+		    $("button#aceptar-search").on("click",function(){
+		    	$("input#usuario_nom").val(username);
+		    });
+		    $("input[name={{form.dias_fijo.name}}").on("focusout",function(){
+		    	alert("bitch :)");
+		    });
+		});
+	</script>
+{% endblock javascript %}

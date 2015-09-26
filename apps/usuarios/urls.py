@@ -13,4 +13,5 @@ urlpatterns = patterns('',
     url(r'^registrar/asignar-roles/usuario-search/$', 'apps.usuarios.views.ajax_usuario_search', name='usuario_search'),
     url(r'^registrar/asignar-roles/grupo/(\d+)/$', 'apps.usuarios.views.ajax_table_usuarios', name="tabla_grupo"),
     url(r'^registrar/asignar-roles/usuarios-por-tipo/$', 'apps.usuarios.views.ajax_tabla_agregarperiodo', name="tabla_tipo"),
+    url(r'^registrar/asignar-roles/usuarios-por-periodo/$','apps.usuarios.views.ajax_usuarios_periodo', name="tabla_usuarios_periodo"),
 )

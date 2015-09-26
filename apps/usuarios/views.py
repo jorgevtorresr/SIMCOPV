@@ -70,11 +70,12 @@ def agregar_periodo(request):
 	return render(request, "usuarios/agregarperiodo.html",{"fecha":fecha})
 
 def agregar_periodoporusuario(request):
+	years = range(1939,2051)
 	if request.method == "POST":
 		form = PeriodoForm(request.POST)
 	else:
 		form = PeriodoForm()
-	return render(request,"usuarios/agregarperiodoporusuario.html",{"form":form})
+	return render(request,"usuarios/agregarperiodoporusuario.html",{"form":form,"years":years})
 
 def creacionderoles():
 	# Creación de Grupos para el sistema
@@ -134,6 +135,18 @@ def ajax_table_usuarios(request,id):
 		except:
 			raise Http404("No se puede encontrar la pagina solicitada")
 	return render(request, "usuarios/tablausuarios.html",{})
+
+def ajax_usuarios_periodo(request):
+	if request.is_ajax():
+		query = request.GET.get("buscar","")
+		tipo = request.GET.get("tipo","")
+		ajax= User.objects.filter(last_name__icontains=query,is_superuser=False,persona__tipo__exact=tipo)
+		try:
+			if ajax.__len__() <= 0 and query.__len__() > 0:
+				ajax = User.objects.filter(username__exact=query,persona__tipo__exact=tipo)
+		except:
+			pass 
+	return render(request, "usuarios/usuario-search.html",{"ajax":ajax})
 
 def ajax_usuario_search(request):
 	if request.is_ajax():
