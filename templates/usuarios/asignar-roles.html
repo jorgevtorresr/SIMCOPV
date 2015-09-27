@@ -171,7 +171,7 @@
     function ajaxfy(id){
       $.ajax({
           type:"GET",
-          url: "/usuarios/registrar/asignar-roles/grupo/"+id+"/",
+          url: "/usuarios/ajax/asignar-roles/grupo/"+id+"/",
           data: $("form#grupo").serialize(),
           content: $("form#grupo"),
           success: function(data, status){

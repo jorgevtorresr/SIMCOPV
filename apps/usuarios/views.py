@@ -18,7 +18,7 @@ from django.template.loader import get_template
 from django.template import Context
 from rest_framework import viewsets
 from .models import Persona, TipoNotificacion, Periodo, Notificacion, Unidad, GlobalPermission
-from .forms import PersonaForm, LoginForm, UnidadForm, FrontImages, PeriodoForm
+from .forms import PersonaForm, LoginForm, UnidadForm, FrontImages, PeriodoForm, PersonaModificarForm
 from .serializers import (UserSerializer, PersonaSerializer, TipoNotificacionSerializer, NotificacionSerializer, PeriodoSerializer)
 
 # Create your views here.
@@ -37,7 +37,22 @@ def base(request):
 	return render(request,'base.html',{})
 
 def ver_usuarios(request):
+	if request.method == "POST":
+		pass
 	return render(request, "usuarios/verusuarios.html",{})
+
+def modificar_usuario(request, id):
+	user = Persona.objects.get(pk=id)
+	if request.method == "POST":
+		form = PersonaModificarForm(user, request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse("verusuarios"))
+		else:
+			messages.error(request, "Los datos ingresados no son correctos")
+	else:
+		form = PersonaModificarForm(instance=user)
+	return render(request, "usuarios/modificarusuario.html",{"form":form})
 
 def agregar_periodo(request):	
 	if request.method == "POST":
@@ -148,6 +163,17 @@ def ajax_table_usuarios(request,id):
 		except:
 			raise Http404("No se puede encontrar la pagina solicitada")
 	return render(request, "usuarios/tablausuarios.html",{})
+
+def ajax_usuarios_ver(request):
+	if request.is_ajax():
+		query = request.GET.get("buscar","")
+		ajax = User.objects.filter(last_name__icontains=query,is_superuser=False).order_by("persona__unidad","last_name","first_name")
+		try:
+			if len(ajax) <= 0 and len(query) > 0:
+				ajax = User.objects.filter(username__exact=query,is_superuser=False)
+		except:
+			pass 
+	return render(request, "usuarios/tabla-verusuarios.html",{"ajax":ajax})
 
 def ajax_usuarios_periodo(request):
 	if request.is_ajax():

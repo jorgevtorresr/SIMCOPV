@@ -1,4 +1,69 @@
 {% extends "base.html" %}
+{% block css %}
+	{{block.super}}
+	<style>
+		table#table_usuarios tr.usuario-row:hover{
+			background-color: #e5e5e5;
+			cursor: pointer;
+		}
+	</style>
+{% endblock css %}
 {% block content %}
-	
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="text-center">
+				<form action="" method="get" id="form-search" class="form-inline">
+					<div class="form-group">
+						<label for="id_buscar">Buscar: 	</label>
+						<div class="input-group">
+							<input type="text" name="buscar" id="id_buscar" class="form-control" placeholder="Cédula o Apellido">
+							<span class="input-group-btn">
+								<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+							</span>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table table-bordered" id="table_usuarios">
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
 {% endblock content %}
+{% block javascript %}
+	{{block.super}}
+	<script>
+	 $(document).ready(function(){
+	 	tabla_ajax();
+	 	$("form#form-search").on("submit",function(event){
+	 		event.preventDefault();
+	 		tabla_ajax();
+	 		return false;
+	 	});
+	 	function tabla_ajax(){
+	 		$.ajax({
+	 			type: "GET",
+	 			data: $("form#form-search").serialize(),
+	 			url: "{% url 'tabla_usuarios' %}",
+	 			success: function(data, status){
+	 				$("table#table_usuarios").html(data);
+	 			},
+	 			error: function(xhr,errmsg,err){
+		          alert(xhr.status + ": " + xhr.responseText);
+		        }
+	 		});
+	 	}
+	 });
+	</script>
+{% endblock javascript %}

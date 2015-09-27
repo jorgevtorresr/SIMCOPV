@@ -1,0 +1,32 @@
+<thead>
+	<tr>
+		<th>Modificar</th>
+		<th>Dar de Baja</th>
+		<th>Cédula</th>
+		<th>Nombre</th>
+		<th>Apellido</th>
+		<th>Roles</th>
+		<th>Puesto</th>
+		<th>Unidad</th>
+	</tr>
+</thead>
+<tbody>
+	{% for usuario in ajax %}
+	<tr class="usuario-row">
+		<td class="modificar" style="width: 5px"><a href="{% url 'modificarusuario' usuario.persona.id %}"class="btn btn-warning btn-xs" data-toggle="modal">Modificar</a></td>
+		<td class="eliminar text-center" style="width: 100px"><a href="#modal-baja" class="btn btn-danger btn-xs" data-toggle="modal">Dar de Baja</a></td>
+		<td>{{usuario.username}}</td>
+		<td>{{usuario.first_name}}</td>
+		<td>{{usuario.last_name}}</td>
+		<td>
+		<ul>
+		{% for group in usuario.groups.all %}
+			<li>{{group}}</li>
+		{% endfor %}
+		</ul>
+		</td>
+		<td>{{usuario.persona.puesto}}</td>
+		<td>{{usuario.persona.unidad}}</td>
+	</tr>
+	{% endfor %}
+</tbody>
