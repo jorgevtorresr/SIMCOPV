@@ -1,5 +1,29 @@
 {% extends "base.html" %}
+{% block css %}
+	{{block.super}}
+	<style>
+	table#table-search tr.usuario-row td:hover{
+		cursor: pointer;
+	}
+	</style>
+{% endblock css %}
 {% block content %}
+	{% if messages %}
+			{% for message in messages %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+			<div class="alert alert-danger">	
+			{% endif %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+			<div class="alert alert-success">	
+			{% endif %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+			<div class="alert alert-warning">	
+			{% endif %}
+			<button class="close" data-dismiss="alert"><span>&times;</span></button>
+				<strong>Alerta!</strong> {{message}}	
+			</div>
+			{% endfor %}
+	{% endif %}
 	<h3 class="text-center">
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -35,8 +59,8 @@
 							{{form.errors.dias_vac}}
 						</div>
 						<div class="form-group">
-							<label for="id_{{form.horas_vac.name}}">Horas de Vacaciones:</label>
-							<input type="time" name="{{form.horas_vac.name}}" id="id_{{form.horas_vac.name}}" value="{{form.horas_vac.value|default:'00:00'}}" class="form-control">
+							<label for="id_{{form.horas_vac.name}}">Horas Restantes:</label>
+							<input type="time" name="{{form.horas_vac.name}}" id="id_{{form.horas_vac.name}}" class="form-control">
 							{{form.errors.horas_vac}}
 						</div>
 						<div class="form-group">
@@ -103,9 +127,9 @@
 	<script>
 		$(document).ready(function(){
 			if($("input[name={{form.dias_vac.name}}]").val()==30){
-    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("disabled","disabled");
+    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("readonly","readonly");
     		}else{
-				$("input#id_{{form.horas_vac.name}}").removeAttr("disabled");
+				$("input#id_{{form.horas_vac.name}}").removeAttr("readonly");
     		}
 			function ajaxify(){
 				$.ajax({
@@ -213,7 +237,7 @@
 		    	if ($(this).val() > year){
 		    		$(this).parent().addClass("has-error");
 		    		if ($("span#error").length == 0){
-			    			$(this).parent().append('<span id="error">Seleccione un año válido antes del '+year+'</span>');
+			    			$(this).parent().append('<span id="error">Seleccione un año válido (antes del '+year+')</span>');
 			    		}
 		    	}else{
 		    		$(this).parent().removeClass("has-error");
@@ -221,7 +245,7 @@
 		    	}
 		    });
 		    $("form#agregarperiodo").on("submit",function(event){
-		    	num = $("span#{{form.dias_fijo.name}}").length + $("span#{{form.dias_vac.name}}").length + $("span#error").length;
+		    	num = $("span#{{form.dias_fijo.name}}").length + $("span#{{form.dias_vac.name}}").length + $("span#error").length + $("span#errormax").length;
 		    	if(num > 0){
 		    		event.preventDefault();
 		    		if($("div#formerror").length == 0){
@@ -236,8 +260,12 @@
 		    	vacaciones = $("input[name={{form.dias_vac.name}}]").val();
 		    	if (parseInt(vacaciones) > parseInt(fijos)){
 		    		$(this).parent().addClass("has-error");
+		    		if($("span#errormax").length == 0){
+		    			$(this).parent().append('<span id="errormax" style="display:block">Los días restantes deben ser menores o iguales a los días de vacaciones</span>');
+		    		}
 		    	}else{
 					$(this).parent().removeClass("has-error");
+					$("span#errormax").remove();
 		    	}
 		    });
 		});

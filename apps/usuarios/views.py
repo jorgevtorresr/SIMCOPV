@@ -4,13 +4,14 @@ import os
 import json
 import datetime as dt
 from datetime import datetime
+from django.db.models import Q, F, Max
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.storage import default_storage
-from django.db.models import Q, F, Max
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import get_template
@@ -32,8 +33,11 @@ def index(request):
 def base(request):
 	usuario = request.user
 	if usuario.check_password(usuario.username):
-		return HttpResponseRedirect("/usuarios/cuenta/change_password/")
+		return HttpResponseRedirect(reverse("change_password"))
 	return render(request,'base.html',{})
+
+def ver_usuarios(request):
+	return render(request, "usuarios/verusuarios.html",{})
 
 def agregar_periodo(request):	
 	if request.method == "POST":
@@ -64,15 +68,24 @@ def agregar_periodo(request):
 						dias = 30 if periodomax.dias_fijo+1 > 30 else periodomax.dias_fijo+1
 						periodo = Periodo(anio_periodo=year,dias_fijo=dias,dias_vac=dias,horas_vac=dt.time(0),usuario=tmp)
 						periodo.save()
-			messages.success(request,"Periodo Agregado con exito")
+			messages.success(request,"Período Agregado con exito")
 			return HttpResponseRedirect(".")
 	fecha = datetime.now().year + 1
 	return render(request, "usuarios/agregarperiodo.html",{"fecha":fecha})
 
 def agregar_periodoporusuario(request):
-	years = range(1939,2051)
+	years = range(1971,2051)
 	if request.method == "POST":
 		form = PeriodoForm(request.POST)
+		if form.is_valid():
+			year = form.cleaned_data["anio_periodo"]
+			usuario = form.cleaned_data["usuario"]
+			periodos = Periodo.objects.filter(usuario=usuario,anio_periodo=year)
+			if len(periodos) > 0:
+				messages.error(request,"Ya ha sido agregado ese Período para ese Usuario")
+			else:
+				form.save()
+				messages.success(request,"Período Agregado Correctamente")
 	else:
 		form = PeriodoForm()
 	return render(request,"usuarios/agregarperiodoporusuario.html",{"form":form,"years":years})
@@ -298,7 +311,7 @@ def autenticacion(request):
 					if next != "":
 						return HttpResponseRedirect(next)
 					else:
-						return HttpResponseRedirect("/usuarios/simcopv/")
+						return HttpResponseRedirect(reverse("base"))
 				else:
 					mensaje = "El usuario no esta actualmente activo"
 					return render(request, "login.html",{"men":mensaje,"form":form})
