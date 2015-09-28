@@ -36,9 +36,34 @@ def base(request):
 		return HttpResponseRedirect(reverse("change_password"))
 	return render(request,'base.html',{})
 
+def activar_usuarios(request):
+	buscar = request.GET.get("buscar","")
+	if request.method == "POST":
+		idusuario = request.POST.get("idusuario","")
+		usuario = User.objects.get(pk=int(idusuario))
+		usuario.is_active = True
+		usuario.save()
+		messages.success(request,"Usuario Activado Correctamente")
+		return HttpResponseRedirect(reverse("activarusuarios"))
+	noactivos = User.objects.filter(last_name__icontains=buscar,is_superuser=False,is_active=False)
+	try:
+		if len(noactivos) <= 0 and len(buscar) > 0:
+			noactivos = User.objects.filter(username__exact=buscar,is_active=False)	
+	except:
+		pass
+	return render(request,"usuarios/activarusuarios.html",{"noactivos":noactivos})
+
+def cambiar_password(request):
+	return render(request,"usuarios/cambiarpassword.html",{})
+
 def ver_usuarios(request):
 	if request.method == "POST":
-		pass
+		id = request.POST.get("idusuario","")
+		usuario = User.objects.get(pk=int(id))
+		usuario.is_active = False
+		usuario.save()
+		messages.success(request,"Operación realizada con éxito")
+		return HttpResponseRedirect(reverse("verusuarios"))
 	return render(request, "usuarios/verusuarios.html",{})
 
 def modificar_usuario(request, id):
@@ -158,7 +183,7 @@ def ajax_table_usuarios(request,id):
 		query = request.GET.get("grupo","")
 		try:
 			grupo = get_object_or_404(Group, pk=int(query))
-			usuarios = grupo.user_set.all()
+			usuarios = grupo.user_set.filter(is_active=True)
 			return render(request, "usuarios/tablausuarios.html",{"usuarios":usuarios})
 		except:
 			raise Http404("No se puede encontrar la pagina solicitada")
@@ -167,10 +192,10 @@ def ajax_table_usuarios(request,id):
 def ajax_usuarios_ver(request):
 	if request.is_ajax():
 		query = request.GET.get("buscar","")
-		ajax = User.objects.filter(last_name__icontains=query,is_superuser=False).order_by("persona__unidad","last_name","first_name")
+		ajax = User.objects.filter(last_name__icontains=query,is_superuser=False,is_active=True).order_by("persona__unidad","last_name","first_name")
 		try:
 			if len(ajax) <= 0 and len(query) > 0:
-				ajax = User.objects.filter(username__exact=query,is_superuser=False)
+				ajax = User.objects.filter(username__exact=query,is_superuser=False,is_active=True)
 		except:
 			pass 
 	return render(request, "usuarios/tabla-verusuarios.html",{"ajax":ajax})
@@ -179,10 +204,10 @@ def ajax_usuarios_periodo(request):
 	if request.is_ajax():
 		query = request.GET.get("buscar","")
 		tipo = request.GET.get("tipo","")
-		ajax= User.objects.filter(last_name__icontains=query,is_superuser=False,persona__tipo__exact=tipo)
+		ajax= User.objects.filter(last_name__icontains=query,is_superuser=False,is_active=True,persona__tipo__exact=tipo)
 		try:
 			if ajax.__len__() <= 0 and query.__len__() > 0:
-				ajax = User.objects.filter(username__exact=query,persona__tipo__exact=tipo)
+				ajax = User.objects.filter(username__exact=query,is_active=True,persona__tipo__exact=tipo)
 		except:
 			pass 
 	return render(request, "usuarios/usuario-search.html",{"ajax":ajax})
@@ -190,10 +215,10 @@ def ajax_usuarios_periodo(request):
 def ajax_usuario_search(request):
 	if request.is_ajax():
 		query = request.GET.get("buscar","")
-		ajax = User.objects.filter(last_name__icontains=query,is_superuser=False)
+		ajax = User.objects.filter(last_name__icontains=query,is_superuser=False,is_active=True)
 		try:
 			if ajax.__len__() <= 0 and query.__len__() > 0:
-				ajax = User.objects.filter(username__exact=query)	
+				ajax = User.objects.filter(username__exact=query,is_active=True)	
 		except:
 			pass
 	return render(request,"usuarios/usuario-search.html",{"ajax":ajax})
@@ -248,9 +273,8 @@ def ajax_tabla_agregarperiodo(request):
 	if request.is_ajax():
 		tipo = request.GET.get("tipo","")
 		fecha = datetime.now().year + 1
-		usuarios = User.objects.filter(~Q(periodo__anio_periodo=fecha),persona__tipo=tipo)
+		usuarios = User.objects.filter(~Q(periodo__anio_periodo=fecha),persona__tipo=tipo,is_active=True)
 	return render(request,"usuarios/tabla-agregarperiodo.html",{"usuarios":usuarios})
-
 
 @login_required
 def change_password(request):
@@ -347,6 +371,7 @@ def autenticacion(request):
 	else:
 		form = LoginForm()
 	return render(request, "login.html",{'form':form})
+
 class UserViewSet(viewsets.ModelViewSet):
 	queryset = User.objects.all()
 	serializer_class = UserSerializer

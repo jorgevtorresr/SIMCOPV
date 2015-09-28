@@ -9,6 +9,22 @@
 	</style>
 {% endblock css %}
 {% block content %}
+	{% if messages %}
+			{% for message in messages %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+			<div class="alert alert-danger">	
+			{% endif %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+			<div class="alert alert-success">	
+			{% endif %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+			<div class="alert alert-warning">	
+			{% endif %}
+			<button class="close" data-dismiss="alert"><span>&times;</span></button>
+				<strong>Alerta!</strong> {{message}}	
+			</div>
+			{% endfor %}
+	{% endif %}
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="text-center">
@@ -40,6 +56,26 @@
 		</div>
 	</div>
 	</div>
+		<div class="modal fade" id="modal-baja">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4>¿Está seguro que desea dar de baja este Usuario?</h4>
+				</div>
+				<div class="modal-body">
+					<p class="username"></p>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+					<form action="" method="post" style="display: inline-block;">
+						{% csrf_token %}
+						<input type="hidden" id="idusuario" name="idusuario">
+						<button class="btn btn-danger" type="submit">Dar de Baja</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock content %}
 {% block javascript %}
 	{{block.super}}
@@ -64,6 +100,13 @@
 		        }
 	 		});
 	 	}
+	 	$("table#table_usuarios").on("click","a[href=#modal-baja]",function(){
+	 		$("input#idusuario").val($(this).next().text());
+	 		ci = $(this).parent().next().text();
+	 		nombre = $(this).parent().next().next().text() + " " + $(this).parent().next().next().next().text();
+	 		$("p.username").text("CI: "+ci+" - "+nombre);
+	 	});
 	 });
+
 	</script>
 {% endblock javascript %}

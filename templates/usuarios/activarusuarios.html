@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+	{% if messages %}
+			{% for message in messages %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+			<div class="alert alert-danger">	
+			{% endif %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+			<div class="alert alert-success">	
+			{% endif %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+			<div class="alert alert-warning">	
+			{% endif %}
+			<button class="close" data-dismiss="alert"><span>&times;</span></button>
+				<strong>Alerta!</strong> {{message}}	
+			</div>
+			{% endfor %}
+	{% endif %}
+	<h3 class="text-center">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Lista de Usuarios no Activos
+		</div>
+	</div>
+	</h3>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="text-center">
+				<form action="" method="get" class="form-inline">
+					<div class="form-group">
+						<label for="id_buscar">Buscar:</label>
+						<div class="input-group">
+							<input type="text" name="buscar" id="buscar" class="form-control">
+							<span class="input-group-btn">
+								<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+							</span>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table table-bordered text-center">
+							<thead>
+								<tr>
+									<th>Activar</th>
+									<th>Cédula</th>
+									<th>Nombre</th>
+									<th>Torres</th>
+									<th>Puesto</th>
+									<th>Unidad</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% if noactivos|length > 0 %}
+								{% for user in noactivos %}
+								<tr>
+									<td style="width: 3px">
+									<form action="" class="form" method="post">
+										{% csrf_token %}
+										<input type="hidden" value="{{user.id}}" name="idusuario">
+										<button type="submit" class="btn btn-warning btn-xs">Activar</button>
+									</form>
+									</td>
+									<td>{{user.username}}</td>
+									<td>{{user.first_name}}</td>
+									<td>{{user.last_name}}</td>
+									<td>{{user.persona.puesto}}</td>
+									<td>{{user.persona.unidad}}</td>
+								</tr>
+								{% endfor %}
+							{% else %}
+						    <tr>
+						      <td colspan="6">
+						      No existen Usuarios No Activos (Dados de Baja) al Momento
+						      </td>
+						    </tr>
+						  {% endif %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock content %}

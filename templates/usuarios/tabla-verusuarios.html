@@ -14,7 +14,7 @@
 	{% for usuario in ajax %}
 	<tr class="usuario-row">
 		<td class="modificar" style="width: 5px"><a href="{% url 'modificarusuario' usuario.persona.id %}"class="btn btn-warning btn-xs" data-toggle="modal">Modificar</a></td>
-		<td class="eliminar text-center" style="width: 100px"><a href="#modal-baja" class="btn btn-danger btn-xs" data-toggle="modal">Dar de Baja</a></td>
+		<td class="eliminar text-center" style="width: 100px"><a href="#modal-baja" class="btn btn-danger btn-xs" data-toggle="modal">Dar de Baja</a><span class="hidden">{{usuario.id}}</span></td>
 		<td>{{usuario.username}}</td>
 		<td>{{usuario.first_name}}</td>
 		<td>{{usuario.last_name}}</td>

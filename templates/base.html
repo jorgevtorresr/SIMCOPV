@@ -2,15 +2,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
     <title>
     {% block title %}
       SIMCOPV Admin
     {% endblock title %}
     </title>
     <!-- Tell the browser to be responsive to screen width -->
-    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     
     {% block css %}
     <!-- Bootstrap 3.3.4 -->
@@ -18,12 +17,11 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-theme.min.css" %}">
     <link href="{% static "css/vendor/AdminLTE.min.css"%}" rel="stylesheet" type="text/css" />
-    <link href="{% static "css/vendor/skins/skin-blue.min.css"%}" rel="stylesheet" type="text/css" />
-    <link rel="icon" href="{% static "img/favicon.ico" %}">
+    <link href="{% static "css/vendor/skins/skin-blue-light.min.css"%}" rel="stylesheet" type="text/css" />
     {% endblock css %}
 
   </head>
-  <body class="skin-blue sidebar-mini">
+  <body class="skin-blue-light sidebar-mini">
     <style>
       li.user-header > a{
         margin-bottom: 0;
@@ -63,7 +61,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <!-- The user image in the navbar-->
                   {% if usuario.is_superuser %}
-                    <img src="{% static "img/user2-160x160.jpg" %}" class="user-image" alt="User Image" />
+                    <img src="{% static "img/user2-512x512.png" %}" class="user-image" alt="User Image" />
                   {% else %}
                     <img src="{{usuario.persona.foto.url}}" class="user-image" alt="User Image" />
                   {% endif %}
@@ -74,7 +72,7 @@
                   <!-- The user image in the menu -->
                   <li class="user-header">
                     {% if usuario.is_superuser %}
-                      <img src="{% static "img/user2-160x160.jpg" %}" class="img-circle" alt="User Image" />
+                      <img src="{% static "img/user2-512x512.png" %}" class="img-circle" alt="User Image" />
                     {% else %}
                       <img src="{{usuario.persona.foto.url}}" class="img-circle" alt="User Image" />
                     {% endif %}
@@ -112,7 +110,7 @@
           <div class="user-panel">
             <div class="pull-left image">
               {% if usuario.is_superuser %}
-                <img src="{% static "img/user2-160x160.jpg" %}" class="img-circle" alt="User Image" />
+                <img src="{% static "img/user2-512x512.png" %}" class="img-circle" alt="User Image" />
               {% else %}
                 <img src="{{usuario.persona.foto.url}}" class="img-circle" alt="User Image" />
               {% endif %}
@@ -151,7 +149,6 @@
               <ul class="nav nav-second-level">
                 <li><a href="{% url 'agregarusuario' %}">Agregar Usuario</a></li>
                 <li><a href="{% url 'verusuarios' %}">Ver Usuarios</a></li>
-                <li><a href="#">Dar de Baja</a></li>
               </ul>
             </li>
             <li>
@@ -179,9 +176,9 @@
                 {% endif %}
               </ul>
             </li>
-            <li><a href="#"><i class='glyphicon glyphicon-calendar'></i> <span>Vacaciones</span>
-            <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div>
-            </a>
+            <li>
+            <a href="#"><i class='glyphicon glyphicon-calendar'></i> <span>Vacaciones</span>
+            <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div></a>
               <ul class="nav nav-second-level">
                 {% if perms.usuarios.crear_vacaciones %}
                   <li><a href="#">Crear Distributivo Vacaciones</a></li>
@@ -196,8 +193,9 @@
             <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div></a>
               <ul class="nav nav-second-level">
                 {% if perms.usuarios.cambiar_password %}
-                  <li><a href="#">Cambiar Contraseña</a></li>
+                  <li><a href="{% url 'cambiarpassword' %}">Cambiar Contraseña</a></li>
                 {% endif %}
+                <li><a href="{% url 'activarusuarios' %}">Activar Usuarios</a></li>
               </ul>
             </li>
             <li><a href="#"><i class='glyphicon glyphicon-bookmark'></i> <span>Reportes</span></a></li>
