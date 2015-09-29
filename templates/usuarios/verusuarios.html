@@ -9,6 +9,15 @@
 	</style>
 {% endblock css %}
 {% block content %}
+	<h4>
+	  <div class="text-center">
+	    <div class="panel panel-default">
+	      <div class="panel-heading">
+	        Lista de Usuarios
+	      </div>
+	    </div>
+	  </div>
+	</h4>
 	{% if messages %}
 			{% for message in messages %}
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}

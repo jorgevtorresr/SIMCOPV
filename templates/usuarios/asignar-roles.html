@@ -11,18 +11,16 @@
   }
   </style>
 {% endblock css %}
-{% block content %}
-  <div class="row">
-    <div class="col-xs-12"> 
+{% block content %}  
+  <h4>
       <div class="text-center">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4>Asignar Roles</h4>
+            Asignar Roles
           </div>
         </div>
       </div>
-    </div>
-  </div>
+  </h4>
   {% if messages %}
     {% for message in messages %}
       {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
@@ -41,8 +39,8 @@
         <strong>Alerta!</strong> {{message}}  
       </div>
       {% endfor %}
+      <br>
   {% endif %}
-  <br>
 	<div class="row">
    <div class="col-xs-3">
     <div class="panel panel-primary">

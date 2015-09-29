@@ -147,8 +147,8 @@
               <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div>
               </a>
               <ul class="nav nav-second-level">
-                <li><a href="{% url 'agregarusuario' %}">Agregar Usuario</a></li>
-                <li><a href="{% url 'verusuarios' %}">Ver Usuarios</a></li>
+                <li><a href="{% url 'agregarusuario' %}"><span class="glyphicon glyphicon-record"></span> Agregar Usuario</a></li>
+                <li><a href="{% url 'verusuarios' %}"><span class="glyphicon glyphicon-record"></span> Ver Usuarios</a></li>
               </ul>
             </li>
             <li>
@@ -159,9 +159,9 @@
               <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div>
               </a>
               <ul class="nav nav-second-level">
-                <li><a href="{% url 'agregarperiodo' %}">Agregar Período</a></li>
-                <li><a href="{% url 'agregarperiodoporusuario' %}">Agregar Período por Usuario</a></li>
-                <li><a href="{% url 'verperiodos' %}">Ver Periodos</a></li>
+                <li><a href="{% url 'agregarperiodo' %}"><span class="glyphicon glyphicon-record"></span> Agregar Período</a></li>
+                <li><a href="{% url 'agregarperiodoporusuario' %}"><span class="glyphicon glyphicon-record"></span> Agregar Período por Usuario</a></li>
+                <li><a href="{% url 'verperiodos' %}"><span class="glyphicon glyphicon-record"></span> Ver Periodos</a></li>
               </ul>
             </li>
             <li>
@@ -169,11 +169,11 @@
               <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div></a>
               <ul class="nav nav-second-level">
                 {% if perms.usuarios.pedir_permiso %}
-                  <li><a href="{% url 'permiso' %}">Solicitar Permiso</a></li>
-                  <li><a href="#">Ver Permisos</a></li>
+                  <li><a href="{% url 'permiso' %}"><span class="glyphicon glyphicon-record"></span> Solicitar Permiso</a></li>
+                  <li><a href="#"><span class="glyphicon glyphicon-record"></span> Ver Permisos</a></li>
                 {% endif %}
                 {% if perms.usuarios.validar_permiso %}
-                  <li><a href="#">Validar Permisos</a></li>
+                  <li><a href="#"><span class="glyphicon glyphicon-record"></span> Validar Permisos</a></li>
                 {% endif %}
               </ul>
             </li>
@@ -182,21 +182,21 @@
             <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div></a>
               <ul class="nav nav-second-level">
                 {% if perms.usuarios.crear_vacaciones %}
-                  <li><a href="#">Crear Distributivo Vacaciones</a></li>
+                  <li><a href="#"><span class="glyphicon glyphicon-record"></span> Crear Distributivo Vacaciones</a></li>
                 {% endif %}
                 {% if perms.usuarios.validar_vacaciones %}
-                  <li><a href="#">Validar Vacaciones</a></li>
+                  <li><a href="#"><span class="glyphicon glyphicon-record"></span> Validar Vacaciones</a></li>
                 {% endif %}
-                <li><a href="#">Ver Vacaciones</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-record"></span> Ver Vacaciones</a></li>
               </ul>
             </li>
             <li><a href="#"><i class='glyphicon glyphicon-th'></i> <span>Administración</span>
             <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div></a>
               <ul class="nav nav-second-level">
                 {% if perms.usuarios.cambiar_password %}
-                  <li><a href="#usuario-pass" data-toggle="modal">Cambiar Contraseña</a></li>
+                  <li><a href="#usuario-pass" data-toggle="modal"><span class="glyphicon glyphicon-record"></span> Cambiar Contraseña</a></li>
                 {% endif %}
-                <li><a href="{% url 'activarusuarios' %}">Activar Usuarios</a></li>
+                <li><a href="{% url 'activarusuarios' %}"><span class="glyphicon glyphicon-record"></span> Activar Usuarios</a></li>
               </ul>
             </li>
             <li><a href="#"><i class='glyphicon glyphicon-bookmark'></i> <span>Reportes</span></a></li>
