@@ -29,6 +29,11 @@
 	<div class="col-xs-12 col-md-6">
 		<div class="panel panel-default">
 			<div class="panel-body">
+				<div class="pull-left">
+					<a href="{% url 'verperiodos' %}" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Regresar</a>
+				</div>
+				<br>
+				<br>
 				<form id="modificarperiodo" action="" class="form" role="form" method="post">
 					{% csrf_token %}
 					<div class="form-group">
