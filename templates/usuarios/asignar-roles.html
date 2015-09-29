@@ -6,6 +6,9 @@
   #table-search > tbody > tr.active td{
       background-color: #e5e5e5;
   }
+  #table-search tbody tr td{
+    cursor: pointer;
+  }
   ul#ulside li a{
     overflow: hidden;
   }
@@ -222,9 +225,11 @@
       $('#table-search').html("");
       $('#id_search').val("");
     }
-    $("table#table-search").on('click','.usuario-row',function(){
-      $(this).addClass("active");
-      addList($(this).children("td.hidden").text());
+    $("table#table-search").on('click','tr.usuario-row',function(){
+      if(!($(this).hasClass("active"))){
+        $(this).addClass("active");
+        addList($(this).children("td.hidden").text());
+      }
     });
     function addList(usuario){
       usuarios.push(usuario);
@@ -247,6 +252,11 @@
       var bitch = $(this).parent().siblings(".hidden").text();
       $("input#idusuarioeliminar").val(bitch);
       $("input#idgrupo").val($("input#id_grupo").val());
+    });
+    $("table#table-search").on("click","tr.active",function(){
+      $(this).removeClass("active");
+      var pos = usuarios.indexOf($(this).children("td.hidden").text());
+      usuarios.splice(pos,1);
     });
   });
   </script>
