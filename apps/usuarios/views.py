@@ -32,13 +32,6 @@ def index(request):
 
 def base(request):
 	usuario = request.user
-	idusuario = request.GET.get("username","")
-	try:
-		if idusuario != "":
-			func = User.objects.get(username=idusuario)
-			return HttpResponseRedirect(reverse("cambiarpassword",args=(func.id,)))
-	except:
-		pass
 	if usuario.check_password(usuario.username):
 		return HttpResponseRedirect(reverse("change_password"))
 	return render(request,'base.html',{})
@@ -66,13 +59,6 @@ def ver_periodos(request):
 	return render(request,"usuarios/verperiodos.html",{"periodos":periodos})
 
 def activar_usuarios(request):
-	idusuario = request.GET.get("username","")
-	try:
-		if idusuario != "":
-			func = User.objects.get(username=idusuario)
-			return HttpResponseRedirect(reverse("cambiarpassword",args=(func.id,)))
-	except:
-		pass
 	buscar = request.GET.get("buscar","")
 	if request.method == "POST":
 		idusuario = request.POST.get("idusuario","")

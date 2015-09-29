@@ -54,6 +54,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'apps.usuarios.middlewares.change_password',
 )
 
 ROOT_URLCONF = 'SIMCOPV.urls'
