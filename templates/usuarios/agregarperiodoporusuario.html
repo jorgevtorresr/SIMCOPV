@@ -162,9 +162,9 @@
 					$("input[name={{form.dias_fijo.name}}]").val("15").removeAttr("readonly");
 				}
 				if($("input[name={{form.dias_vac.name}}]").val()==30){
-	    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("disabled","disabled");
+	    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("readonly","readonly");
 	    		}else{
-					$("input#id_{{form.horas_vac.name}}").removeAttr("disabled");
+					$("input#id_{{form.horas_vac.name}}").removeAttr("readonly");
 	    		}
 			});
 			$("#buscar").on("hidden.bs.modal",function(){
@@ -204,9 +204,9 @@
 			    	}
 			    	if($(this).attr("name")=="{{form.dias_vac.name}}"){
 			    		if($(this).val()==30){
-			    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("disabled","disabled");
+			    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("readonly","readonly");
 			    		}else{
-							$("input#id_{{form.horas_vac.name}}").removeAttr("disabled");
+							$("input#id_{{form.horas_vac.name}}").removeAttr("readonly");
 			    		}
 			    	};
 		    	});	
@@ -225,9 +225,9 @@
 			    	}
 			    	if($(this).attr("name")=="{{form.dias_vac.name}}"){
 			    		if($(this).val()==30){
-			    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("disabled","disabled");
+			    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("readonly","readonly");
 			    		}else{
-							$("input#id_{{form.horas_vac.name}}").removeAttr("disabled");
+							$("input#id_{{form.horas_vac.name}}").removeAttr("readonly");
 			    		}
 			    	};
 		    	});	

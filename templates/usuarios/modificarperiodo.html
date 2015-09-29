@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block content %}
+{% if messages %}
+		{% for message in messages %}
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+		<div class="alert alert-danger">	
+		{% endif %}
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+		<div class="alert alert-success">	
+		{% endif %}
+		{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+		<div class="alert alert-warning">	
+		{% endif %}
+		<button class="close" data-dismiss="alert"><span>&times;</span></button>
+			<strong>Alerta!</strong> {{message}}	
+		</div>
+		{% endfor %}
+{% endif %}
+<h3 class="text-center">
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Modificar Periodo
+	</div>
+</div>
+</h3>
+<div class="row">
+	<div class="col-md-3 hidden-xs hidden-sm">
+	</div>
+	<div class="col-xs-12 col-md-6">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<form id="modificarperiodo" action="" class="form" role="form" method="post">
+					{% csrf_token %}
+					<div class="form-group">
+						<label for="id_{{form.anio_periodo.name}}">Año:</label>
+						<input type="text" id="id_{{form.anio_periodo.name}}" name="{{form.anio_periodo.name}}" class="form-control" value="{{form.anio_periodo.value}}" readonly="readonly"> 
+						{{form.errors.anio_periodo}}
+					</div>
+					<div class="form-group">
+						<label for="id_{{form.dias_fijo.name}}">Días de Vacaciones:</label>
+						{{form.dias_fijo}}
+						{{form.errors.dias_fijo}}
+					</div>
+					<div class="form-group">
+						<label for="id_{{form.dias_vac.name}}">Días Restantes:</label>
+						{{form.dias_vac}}
+						{{form.errors.dias_vac}}
+					</div>
+					<div class="form-group">
+						<label for="id_{{form.horas_vac.name}}">Horas Restantes:</label>
+						<input type="time" name="{{form.horas_vac.name}}" id="id_{{form.horas_vac.name}}" class="form-control" value="{{form.horas_vac.value}}">
+						{{form.errors.horas_vac}}
+					</div>
+					<div class="form-group">
+						<label for="id_{{form.usuario.name}}">Usuario:</label>
+						<input type="text" value="CI: {{usuarioperio.username}} - {{usuarioperio.first_name}} {{usuarioperio.last_name}}" class="form-control" readonly="readonly">
+						<input type="hidden" name="{{form.usuario.name}}" id="id_{{form.usuario.name}}" value="{{form.usuario.value}}">
+						{{form.errors.usuario}}
+					</div>
+					<div class="form-group">
+						<button class="btn btn-warning" type="submit">Modificar Periodo</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3 hidden-xs hidden-sm">
+	</div>
+</div>
+{% endblock content %}
+{% block javascript %}
+	{{block.super}}
+	<script>
+	$(document).ready(function(){
+		if($("input[name={{form.dias_vac.name}}]").val()==30){
+			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("readonly","readonly");
+		}else{
+			$("input#id_{{form.horas_vac.name}}").removeAttr("readonly");
+		}
+		verificardias("{{form.dias_fijo.name}}");
+		verificardiasvacaciones("{{form.dias_vac.name}}");
+		function verificardias(name){
+			$("input[name="+name+"]").on("focusout",function(){
+		    	var num = $("input[name="+name+"]").val();
+		    	if (!(parseInt(num) >= 15 && parseInt(num) <= 30)){
+		    		$(this).parent().addClass("has-error");
+		    		if ($("span#"+name).length == 0){
+		    			$(this).parent().append('<span id="'+name+'">Escoja un número entre 15 y 30</span>');
+		    		}
+		    	}else{
+		    		$(this).parent().removeClass("has-error");
+		    		$("span#"+name).remove();
+		    	}
+		    	if($(this).attr("name")=="{{form.dias_vac.name}}"){
+		    		if($(this).val()==30){
+		    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("readonly","readonly");
+		    		}else{
+						$("input#id_{{form.horas_vac.name}}").removeAttr("readonly");
+		    		}
+		    	};
+			});	
+		}
+		function verificardiasvacaciones(name){
+			$("input[name="+name+"]").on("focusout",function(){
+		    	var num = $("input[name="+name+"]").val();
+		    	if (!(parseInt(num) >= 0 && parseInt(num) <= 30)){
+		    		$(this).parent().addClass("has-error");
+		    		if ($("span#"+name).length == 0){
+		    			$(this).parent().append('<span id="'+name+'">Escoja un menor o igual a 30</span>');
+		    		}
+		    	}else{
+		    		$(this).parent().removeClass("has-error");
+		    		$("span#"+name).remove();
+		    	}
+		    	if($(this).attr("name")=="{{form.dias_vac.name}}"){
+		    		if($(this).val()==30){
+		    			$("input#id_{{form.horas_vac.name}}").val("00:00").attr("readonly","readonly");
+		    		}else{
+						$("input#id_{{form.horas_vac.name}}").removeAttr("readonly");
+		    		}
+		    	};
+			});	
+		}
+		$("form#modificarperiodo").on("submit",function(event){
+	    	num = $("span#{{form.dias_fijo.name}}").length + $("span#{{form.dias_vac.name}}").length + $("span#error").length + $("span#errormax").length;
+	    	if(num > 0){
+	    		event.preventDefault();
+	    		if($("div#formerror").length == 0){
+	    			$(this).append('<div id="formerror" class="alert alert-danger"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>Alerta!<strong> Corrija los errores antes de ingresar el Periodo</div>');
+	    		}
+	    	}else{
+	    		$("div#formerror").remove();
+	    	}	
+	    });
+		$("input[name={{form.dias_vac.name}}]").on("focusout",function(){
+	    	fijos = $("input[name={{form.dias_fijo.name}}]").val();
+	    	vacaciones = $("input[name={{form.dias_vac.name}}]").val();
+	    	if (parseInt(vacaciones) > parseInt(fijos)){
+	    		$(this).parent().addClass("has-error");
+	    		if($("span#errormax").length == 0){
+	    			$(this).parent().append('<span id="errormax" style="display:block">Los días restantes deben ser menores o iguales a los días de vacaciones</span>');
+	    		}
+	    	}else{
+				$(this).parent().removeClass("has-error");
+				$("span#errormax").remove();
+	    	}
+	    });
+	});
+	</script>
+{% endblock javascript %}

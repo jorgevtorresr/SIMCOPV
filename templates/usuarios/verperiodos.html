@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+	<div class="row">
+		<div class="col-xs-12">
+			<h3 class="text-center">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Ver Periodos	
+					</div>
+				</div>
+			</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="text-center">
+				<form action="" class="form-inline" method="get">
+					<div class="form-group">
+						<label for="id_buscar">Buscar:</label>
+						<div class="input-group">
+							<input type="text" name="buscar" id="id_buscar" class="form-control" placeholder="Ingrese una Cédula">
+							<div class="input-group-btn">
+								<button class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+							</div>						
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table table-bordered text-center">
+							<thead>
+								<tr>
+									<th>Modificar</th>
+									<th>Año</th>
+									<th>Días de Vacaciones</th>
+									<th>Días Restantes</th>
+									<th>Horas Restantes</th>
+									<th>Usuario</th>
+									<th>Nombre</th>
+									<th>Apellido</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% if periodos|length > 0 %}
+								{% for periodo in periodos %}
+								<tr>
+									<td style="width: 3px">
+									<a href="{% url 'modificarperiodo' periodo.id %}" class="btn btn-warning btn-xs">Modificar</a>
+									</td>
+									<td>{{periodo.anio_periodo}}</td>
+									<td>{{periodo.dias_fijo}}</td>
+									<td>{{periodo.dias_vac}}</td>
+									<td>{{periodo.horas_vac}}</td>
+									<td>{{periodo.usuario}}</td>
+									<td>{{periodo.usuario.first_name}}</td>
+									<td>{{periodo.usuario.last_name}}</td>
+								</tr>
+								{% endfor %}
+							{% else %}
+						    <tr>
+						      <td colspan="6">
+						      No existen Periodos para ese Usuario
+						      </td>
+						    </tr>
+						  {% endif %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock content %}

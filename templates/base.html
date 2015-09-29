@@ -161,6 +161,7 @@
               <ul class="nav nav-second-level">
                 <li><a href="{% url 'agregarperiodo' %}">Agregar Período</a></li>
                 <li><a href="{% url 'agregarperiodoporusuario' %}">Agregar Período por Usuario</a></li>
+                <li><a href="{% url 'verperiodos' %}">Ver Periodos</a></li>
               </ul>
             </li>
             <li>
@@ -193,7 +194,7 @@
             <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div></a>
               <ul class="nav nav-second-level">
                 {% if perms.usuarios.cambiar_password %}
-                  <li><a href="{% url 'cambiarpassword' %}">Cambiar Contraseña</a></li>
+                  <li><a href="#usuario-pass" data-toggle="modal">Cambiar Contraseña</a></li>
                 {% endif %}
                 <li><a href="{% url 'activarusuarios' %}">Activar Usuarios</a></li>
               </ul>
@@ -283,7 +284,27 @@
            immediately after the control sidebar -->
       <div class='control-sidebar-bg'></div>
     </div><!-- ./wrapper -->
-
+    <div class="modal fade" id="usuario-pass">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            Ingrese en # de Cédula del Usuario  
+          </div>
+          <form action="" method="get">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="id_username">Cédula</label>
+                <input type="text" class="form-control" name="username" id="id_username">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-info">Actualizar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
     <!-- REQUIRED JS SCRIPTS -->
     {% block javascript %}
     <!-- jQuery 2.1.4 -->

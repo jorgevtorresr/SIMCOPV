@@ -32,11 +32,47 @@ def index(request):
 
 def base(request):
 	usuario = request.user
+	idusuario = request.GET.get("username","")
+	try:
+		if idusuario != "":
+			func = User.objects.get(username=idusuario)
+			return HttpResponseRedirect(reverse("cambiarpassword",args=(func.id,)))
+	except:
+		pass
 	if usuario.check_password(usuario.username):
 		return HttpResponseRedirect(reverse("change_password"))
 	return render(request,'base.html',{})
 
+def modificar_periodo(request, id):
+	periodo = Periodo.objects.get(pk=int(id))
+	usuarioperio = periodo.usuario
+	if request.method == "POST":
+		form = PeriodoForm(request.POST, instance=periodo)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse("verperiodos"))
+	else:
+		form = PeriodoForm(instance=periodo)
+	return render(request, "usuarios/modificarperiodo.html",{"form":form,"usuarioperio":usuarioperio})
+
+def ver_periodos(request):
+	usuario = request.GET.get("buscar","")
+	periodos = []
+	try: 
+		usuario = User.objects.get(username=usuario)
+		periodos = Periodo.objects.filter(usuario=usuario).order_by("anio_periodo")
+	except:
+		pass
+	return render(request,"usuarios/verperiodos.html",{"periodos":periodos})
+
 def activar_usuarios(request):
+	idusuario = request.GET.get("username","")
+	try:
+		if idusuario != "":
+			func = User.objects.get(username=idusuario)
+			return HttpResponseRedirect(reverse("cambiarpassword",args=(func.id,)))
+	except:
+		pass
 	buscar = request.GET.get("buscar","")
 	if request.method == "POST":
 		idusuario = request.POST.get("idusuario","")
@@ -53,8 +89,16 @@ def activar_usuarios(request):
 		pass
 	return render(request,"usuarios/activarusuarios.html",{"noactivos":noactivos})
 
-def cambiar_password(request):
-	return render(request,"usuarios/cambiarpassword.html",{})
+def cambiar_password(request,id):
+	funcionario = User.objects.get(pk=int(id))
+	if request.method == "POST":
+		usuario = request.POST.get("usuario","")
+		password = request.POST.get("newpassword","")
+		user = User.objects.get(pk=int(usuario))
+		user.set_password(password)
+		user.save()
+		return HttpResponseRedirect(reverse("base"))
+	return render(request,"usuarios/cambiarpassword.html",{"funcionario":funcionario})
 
 def ver_usuarios(request):
 	if request.method == "POST":
