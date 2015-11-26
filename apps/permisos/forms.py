@@ -1,8 +1,9 @@
-from django.forms import ModelForm, DateInput
+from django.forms import ModelForm, DateTimeInput
 from .models import Permiso
 
-class DateInput(DateInput):
-	input_type = 'date'
+class DateTimeInput(DateTimeInput):
+	input_type = 'datetime'
+	format_key = 'DATE_INPUT_FORMATS'
 
 class PermisoUsuarioForm(ModelForm):
 	def __init__(self,*args, **kwargs):
@@ -14,5 +15,5 @@ class PermisoUsuarioForm(ModelForm):
 	class Meta:
 		model = Permiso
 		exclude = ["ced_jefe_inmed","ced_jef_talent","ced_gerente","comprobante","estado","tipo","periodo","usuario"]
-		widgets = {'fecha_inicio':DateInput(),
-					'fecha_fin':DateInput()}
+		widgets = {'fecha_inicio':DateTimeInput(),
+					'fecha_fin':DateTimeInput()}
