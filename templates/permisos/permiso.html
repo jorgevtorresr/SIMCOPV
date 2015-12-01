@@ -45,7 +45,49 @@
     $(document).ready(function(){
       $("form#permiso").on("submit",function(event){
         event.preventDefault();
-        
+        var fecha1 = new Date($("#id_fecha_inicio").val());
+        var fecha2 = new Date($("#id_fecha_fin").val());
+        var year = new Date().getFullYear();
+        var date = new Date(year+1,01,01);
+        var hora1 = $("#id_hora_inicio").val().split(":");
+        var hora2 = $("#id_hora_fin").val().split(":");
+        hora1 = new Date("2001","00","01",hora1[0],hora1[1]);
+        hora2 = new Date("2001","00","01",hora2[0],hora2[1]);
+        var descrip = $("#id_descripcion").val();
+        var datenow = new Date(new Date().getFullYear()+"-"+new Date().getDay()+"-"+new Date().getMonth()+"T00:00:00");
+        if (fecha2 < fecha1){
+          $("#id_fecha_inicio").parent("div.form-group").addClass("has-error");
+          $("#id_fecha_fin").parent("div.form-group").addClass("has-error");
+          alert("Las fechas no son consistentes");
+        }else if($("#id_fecha_inicio").val() === $("#id_fecha_fin").val() && hora1.getTime()>hora2.getTime())
+        {
+          $("#id_hora_inicio").parent("div.form-group").addClass("has-error");
+          $("#id_hora_fin").parent("div.form-group").addClass("has-error");
+          alert("Las horas no son consistentes");
+        }else if(fecha1 < datenow || fecha2 < datenow)
+        {
+          $("#id_fecha_inicio").parent("div.form-group").addClass("has-error");
+          $("#id_fecha_fin").parent("div.form-group").addClass("has-error");
+          alert("Las fechas no pueden ser menores al día en curso");
+
+        }
+        else if (fecha1 > date || fecha2 > date)
+        {
+          $("#id_fecha_inicio").parent("div.form-group").addClass("has-error");
+          $("#id_fecha_fin").parent("div.form-group").addClass("has-error");
+          alert("Las fechas no deben sobrepasar el año en curso");
+        }else if(fecha1 === "" || fecha2 === "")
+        {
+          $("#id_fecha_inicio").parent("div.form-group").addClass("has-error");
+          $("#id_fecha_fin").parent("div.form-group").addClass("has-error");
+          alert("Ingrese la fecha de inicio y la de fin");
+        }else if(hora1 === "" || hora2 === "" || descrip === "")
+        {
+          alert("Ingrese los datos completos")
+        }else
+        {
+          this.submit();
+        }
       });
     });
   </script>

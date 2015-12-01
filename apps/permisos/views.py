@@ -17,7 +17,7 @@ def permiso(request):
 		fecha_fin = request.POST.get('fecha_fin','')
 		hora_fin = request.POST.get('hora_fin','')
 		descripcion = request.POST.get('descripcion','')
-		print "{0} $ {1} $ {2} $ {3} $ {4}".format(fecha_inicio,hora_inicio,fecha_fin,hora_fin,descripcion)
+		# I have to obligatorily make server validation		
 		return HttpResponseRedirect(reverse("permiso"))
 	return render(request, "permisos/permiso.html",{})
 
