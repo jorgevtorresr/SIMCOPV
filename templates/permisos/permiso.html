@@ -1,6 +1,22 @@
 {% extends "base.html" %} 
 {% load static from staticfiles %}
 {% block content %}
+{% if messages %}
+      {% for message in messages %}
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+      <div class="alert alert-danger">  
+      {% endif %}
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+      <div class="alert alert-success"> 
+      {% endif %}
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+      <div class="alert alert-warning"> 
+      {% endif %}
+      <button class="close" data-dismiss="alert"><span>&times;</span></button>
+        <strong>Alerta!</strong> {{message}}  
+      </div>
+      {% endfor %}
+  {% endif %}
 	<div class="row">
     <div class="col-sm-3 hidden-xs hidden-sm">
     </div>
@@ -69,7 +85,6 @@
           $("#id_fecha_inicio").parent("div.form-group").addClass("has-error");
           $("#id_fecha_fin").parent("div.form-group").addClass("has-error");
           alert("Las fechas no pueden ser menores al día en curso");
-
         }
         else if (fecha1 > date || fecha2 > date)
         {
