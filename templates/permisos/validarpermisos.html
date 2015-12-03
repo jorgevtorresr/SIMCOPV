@@ -18,6 +18,65 @@
   {% endfor %}
 	{% endif %}
 	<div class="row">
-		
+		<div class="col-sm-1 hidden-xs hidden-sm">
+		</div>
+		<div class="col-xs-12 col-md-10">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="text-center">Solicitud de Permiso</h4>
+				</div>
+				<div class="panel-body">
+					<div class="row text-center">
+						<div class="col-xs-4">
+							<strong>Nombre</strong>
+						</div>
+						<div class="col-xs-4">
+							<strong>Puesto</strong>							
+						</div>
+						<div class="col-xs-4">
+							<strong>Tipo de Usuario</strong>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="col-xs-4">
+							{LOL}
+						</div>
+						<div class="col-xs-4">
+							{LOL}
+						</div>
+						<div class="col-xs-4">
+							{LOL}
+						</div>
+					</div>
+					<br>
+					<div class="row text-center">
+						<div class="col-xs-5">
+							<strong>Fecha Inicio</strong>
+						</div>
+						<div class="col-xs-7">
+							{DATE_1}
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="col-xs-5">
+							<strong>Fecha Fin</strong>
+						</div>
+						<div class="col-xs-7">
+							{DATE_2}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2 col-xs-offset-9">
+							<div class="pull-right">
+								<button class="btn btn-primary">Validar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-1 hidden-xs hidden-sm">
+		</div>
 	</div>
+	
 {% endblock content %}
