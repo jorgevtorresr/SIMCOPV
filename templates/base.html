@@ -173,7 +173,7 @@
                   <li><a href="#"><span class="glyphicon glyphicon-record"></span> Ver Permisos</a></li>
                 {% endif %}
                 {% if perms.usuarios.validar_permiso %}
-                  <li><a href="#"><span class="glyphicon glyphicon-record"></span> Validar Permisos</a></li>
+                  <li><a href="{% url "validar" %}"><span class="glyphicon glyphicon-record"></span> Validar Permisos</a></li>
                 {% endif %}
               </ul>
             </li>

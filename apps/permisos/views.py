@@ -53,11 +53,18 @@ def permiso(request):
 				if periodomax == []:
 					pass
 				else:
+					# Sending dates without timezone
 					permiso = Permiso(fecha_inicio=date_inicio,fecha_fin=date_fin,descripcion=descripcion,usuario=request.user,periodo=periodomax)
-					#permiso.save()
+					permiso.save()
 					messages.success(request,"Permiso ingresado correctamente")
 		return HttpResponseRedirect(reverse("permiso"))	
 	return render(request, "permisos/permiso.html",{})
+
+@login_required
+def validarpermisos(request):
+	""" Metodo usado por los jefes de unidad, gerente y encargados
+		para validar los permisos ingresados por los usuarios"""
+	return render(request,"permisos/validarpermisos.html",{})
 
 # Create your views here.
 class PermisoViewSet(viewsets.ModelViewSet):
