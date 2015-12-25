@@ -9,7 +9,7 @@ from django.db.models import Max
 from django.http import HttpResponseRedirect
 from django.shortcuts import render 
 from rest_framework import viewsets
-from .forms import PermisoUsuarioForm,PermisoValForm
+from .forms import PermisoUsuarioForm
 from .models import Permiso
 from .serializers import PermisoSerializer
 
@@ -72,19 +72,33 @@ def validarpermisos(request):
 		pass # If user has no a Group, It don't work
 	return render(request,"permisos/validarpermisos.html",{"permisos":permisos})
 
+# Validar permiso para Jefe Recursos Humanos y Encargados
+def validarpermisoRRHH(request,id):
+	""" Metodo para validar los permisos en general"""
+	form = []
+	try:
+		permiso = Permiso.objects.get(id=id)
+		if request.method == "POST":
+			pass
+		else:
+			pass
+	except:
+		pass # Si el permiso con ese id no existe, se controla desde el template para poner un 404
+	return render(request,"permisos/validarpermisoRRHH.html",{"permiso":permiso})
+
+# Validar permiso para Jefe de Unidad y Encargados
 def validarpermiso(request,id):
 	""" Metodo para validar los permisos en general"""
 	form = []
 	try:
 		permiso = Permiso.objects.get(id=id)
 		if request.method == "POST":
-			form = PermisoValForm(request.POST,instance=permiso)
+			pass
 		else:
-			form = PermisoValForm(instance=permiso)
+			pass
 	except:
 		pass # Si el permiso con ese id no existe, se controla desde el template para poner un 404
-
-	return render(request,"permisos/validarpermiso.html",{"form":form})
+	return render(request,"permisos/validarpermiso.html",{"permiso":permiso})
 
 # Create your views here.
 class PermisoViewSet(viewsets.ModelViewSet):

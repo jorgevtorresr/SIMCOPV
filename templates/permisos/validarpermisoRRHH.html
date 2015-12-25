@@ -35,36 +35,51 @@
 					<form action="" role="form" class="form" method="post" id="validarform"> 
 						{% csrf_token %}
 						<div class="form-group">
-							<label for="id_usuario">Usuario</label>
-							<input type="text" name="usuario" id="id_usuario" readonly="readonly" class="form-control" value="{{permiso.usuario.first_name}}  {{permiso.usuario.last_name}}">
+							<label for="id_periodo">Periodo</label>
+							<input type="text" name="periodo" id="id_periodo" class="form-control">
 						</div>
 						<div class="form-group">
-							<label for="id_periodo">Periodo</label>
-							<input type="text" name="periodo" id="id_periodo" readonly="readonly" class="form-control" value="{{permiso.periodo.anio_periodo}}">
+							<label for="id_usuario">Usuario</label>
+							<input type="text" name="usuario" id="id_usuario" class="form-control">
 						</div>
 						<div class="form-group">
 			              <label for="id_fecha_inicio">Fecha Inicio:</label>
-			              <input type="date" id="id_fecha_inicio" name="fecha_inicio" class="form-control" value="{{permiso.fecha_inicio|date:'Y-m-d'}}" readonly="readonly">
+			              <input type="date" id="id_fecha_inicio" name="fecha_inicio" class="form-control">
 			            </div>
 			            <div class="form-group">
 			              <label for="id_hora_inicio">Hora Inicio:</label>
-			              <input type="time" id="id_hora_inicio" name="hora_inicio" class="form-control" value="{{permiso.fecha_inicio|time:'H:i'}}" readonly="readonly">
+			              <input type="time" id="id_hora_inicio" name="hora_inicio" class="form-control">
 			            </div>
 			            <div class="form-group">
 			              <label for="id_fecha_fin">Fecha Fin:</label>
-			              <input type="date" id="id_fecha_fin" name="fecha_fin" class="form-control" value="{{permiso.fecha_fin|date:'Y-m-d'}}" readonly="readonly">
+			              <input type="date" id="id_fecha_fin" name="fecha_fin" class="form-control">
 			            </div>
 			            <div class="form-group">
 			              <label for="id_hora_fin">Hora Fin:</label>
-			              <input type="time" id="id_hora_fin" name="hora_fin" class="form-control" value="{{permiso.fecha_inicio|time:'H:i'}}" readonly="readonly">
+			              <input type="time" id="id_hora_fin" name="hora_fin" class="form-control">
 			            </div>
 			            <div class="form-group">
 			              <label for="id_descripcion">Descripción</label>
-			              <textarea name="descripcion" id="id_descripcion" cols="30" rows="10" placeholder="Escriba el motivo por el que pide el permiso" class="form-control" readonly="readonly"> {{permiso.descripcion}} </textarea>
+			              <textarea name="descripcion" id="id_descripcion" cols="30" rows="10" placeholder="Escriba el motivo por el que pide el permiso" class="form-control"></textarea>
 			            </div>
+			            <div class="form-group">
+			            	<label for="id_tipopermiso">Tipo de Permiso</label>
+			            	<div class="row">
+			            		<div class="col-xs-9">
+					            	<select name="tipopermiso" id="id_tipopermiso" class="form-control">
+					            		<option value=""></option>
+					            		<option value="Imputable">Imputable</option>
+					            		<option value="No Imputable">No Imputable</option>
+					            	</select>
+			            		</div>
+			            		<div class="col-xs-3">
+			            			<div class="pull-left">
+			            				<a href="#change" style="text-decoration: underline">Cambiar</a>
+			            			</div>
+			            		</div>
+			            	</div>
+			            </div>			           
 			            <button class="btn btn-success pull-right">Validar</button>
-			            <button class="pull-right" type="hidden">E</button>
-			            <button class="btn btn-default pull-right">Rechazar</button>
 					</form>
 				</div>
 			</div>
@@ -76,4 +91,12 @@
 {% endblock content %}
 {% block javascript %}
 	{{block.super}}
+	<script>
+		$(document).ready(function(){
+			// At the beginning of the load of the page
+			$("#change").on("click",function(){
+				$("#id_tipopermiso").prop("readonly",true);
+			});
+		});
+	</script>
 {% endblock javascript %}
