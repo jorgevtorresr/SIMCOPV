@@ -114,7 +114,7 @@ def agregar_periodo(request):
 		year = request.POST.get("fecha","")
 		lista = request.POST.get("lista","")
 		lista = lista.split(",")
-		usuarios = [];
+		usuarios = []
 		if lista[0] == "":
 			messages.warning(request, "Seleccione al menos un usuario")
 		else:

@@ -36,11 +36,11 @@
 						{% csrf_token %}
 						<div class="form-group">
 							<label for="id_usuario">Usuario</label>
-							<input type="text" name="usuario" id="id_usuario" readonly="readonly" class="form-control" value="{{permiso.usuario.first_name}}  {{permiso.usuario.last_name}}">
+							<input type="text" id="id_usuario" readonly="readonly" class="form-control" value="{{permiso.usuario.first_name}}  {{permiso.usuario.last_name}}">
 						</div>
 						<div class="form-group">
 							<label for="id_periodo">Periodo</label>
-							<input type="text" name="periodo" id="id_periodo" readonly="readonly" class="form-control" value="{{permiso.periodo.anio_periodo}}">
+							<input type="text" id="id_periodo" readonly="readonly" class="form-control" value="{{permiso.periodo.anio_periodo}}">
 						</div>
 						<div class="form-group">
 			              <label for="id_fecha_inicio">Fecha Inicio:</label>
@@ -48,23 +48,24 @@
 			            </div>
 			            <div class="form-group">
 			              <label for="id_hora_inicio">Hora Inicio:</label>
-			              <input type="time" id="id_hora_inicio" name="hora_inicio" class="form-control" value="{{permiso.fecha_inicio|time:'H:i'}}" readonly="readonly">
+			              <input type="time" id="id_hora_inicio" class="form-control" value="{{permiso.fecha_inicio|time:'H:i'}}" readonly="readonly">
 			            </div>
 			            <div class="form-group">
 			              <label for="id_fecha_fin">Fecha Fin:</label>
-			              <input type="date" id="id_fecha_fin" name="fecha_fin" class="form-control" value="{{permiso.fecha_fin|date:'Y-m-d'}}" readonly="readonly">
+			              <input type="date" id="id_fecha_fin" class="form-control" value="{{permiso.fecha_fin|date:'Y-m-d'}}" readonly="readonly">
 			            </div>
 			            <div class="form-group">
 			              <label for="id_hora_fin">Hora Fin:</label>
-			              <input type="time" id="id_hora_fin" name="hora_fin" class="form-control" value="{{permiso.fecha_inicio|time:'H:i'}}" readonly="readonly">
+			              <input type="time" id="id_hora_fin" class="form-control" value="{{permiso.fecha_inicio|time:'H:i'}}" readonly="readonly">
 			            </div>
 			            <div class="form-group">
 			              <label for="id_descripcion">Descripción</label>
-			              <textarea name="descripcion" id="id_descripcion" cols="30" rows="10" placeholder="Escriba el motivo por el que pide el permiso" class="form-control" readonly="readonly"> {{permiso.descripcion}} </textarea>
+			              <textarea id="id_descripcion" cols="30" rows="10" placeholder="Escriba el motivo por el que pide el permiso" class="form-control" readonly="readonly"> {{permiso.descripcion}} </textarea>
 			            </div>
-			            <button class="btn btn-success pull-right">Validar</button>
-			            <button class="pull-right" type="hidden">E</button>
-			            <button class="btn btn-default pull-right">Rechazar</button>
+			            <a href="#modal-accept" class="btn btn-primary pull-right" data-toggle="modal" id="avalidar">Validar</a>
+			            <input type="hidden" id="inputmode" name="mode"> <!-- Input
+			            que contiene el modo (validar o rechazar) y se lo envía en el POST -->
+			            <a href="#modal-accept" class="btn btn-default pull-left" data-toggle="modal" id="arechazar">Rechazar</a>
 					</form>
 				</div>
 			</div>
@@ -72,8 +73,41 @@
 		<div class="col-sm-3 hidden-xs hidden-sm">
 		</div>
 	</div>
+	<div class="modal fade" id="modal-accept">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4>Validación de Permiso de Usuario</h4>
+				</div>
+				<div class="modal-body">
+					<p>¿Está seguro de que desea <strong></strong> el permiso?</p>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal" value="cancelar">Cancelar</button>
+					<button id="aceptar" class="btn btn-info" type="submit">Aceptar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endif %}
 {% endblock content %}
 {% block javascript %}
 	{{block.super}}
+	<script>
+		$(document).ready(function(){
+			var mode = null;
+			$("#avalidar").on("click",function(){
+				$("div#modal-accept").find("strong").text("validar");
+				mode = "validar";
+			});
+			$("#arechazar").on("click",function(){
+				$("div#modal-accept").find("strong").text("rechazar");
+				mode = "rechazar";
+			});
+			$("button#aceptar").on("click",function(){
+				$("input#inputmode").val(mode);
+				$("form.form").submit();
+			});
+		});
+	</script>
 {% endblock javascript %}

@@ -56,7 +56,11 @@
 							</tbody>
 						</table>
 						<div class="pull-right">
-							<button class="btn btn-primary" type="submit">Validar</button>
+							{% if RRHH %}
+								<a href="{% url 'validarpermRRHH' permiso.id %}" class="btn btn-primary">Validar</a>
+							{% else %}
+								<a href="{% url 'validarperm' permiso.id %}" class="btn btn-primary">Validar</a>
+							{% endif %}
 						</div>
 					</div>
 				</div>

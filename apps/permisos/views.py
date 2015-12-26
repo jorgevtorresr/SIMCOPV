@@ -67,15 +67,28 @@ def validarpermisos(request):
 	user = request.user
 	permisos = []
 	try:
-		permisos = Permiso.objects.filter(usuario__persona__unidad=user.persona.unidad,estado=True)
+		permisos = Permiso.objects.filter(usuario__persona__unidad=user.persona.unidad,estado=True,ced_jefe_inmed="")
 	except:
 		pass # If user has no a Group, It don't work
 	return render(request,"permisos/validarpermisos.html",{"permisos":permisos})
 
+def validarpermisosRRHH(request):
+	""" Metodo usado por el jefe de RRHH para ver el listado de 
+	permisos para validarlos, previa validación por parte de los jefes inmediatos """
+	user = request.user 
+	permisos = []
+	try: 
+		user.groups.get(name="Jefe de Talento Humano y Encargados")
+		permisos = Permiso.objects.filter(estado=True).exclude(ced_jefe_inmed="")
+	except:
+		pass
+	return render(request,"permisos/validarpermisos.html",{"permisos":permisos,"RRHH":True})
+
 # Validar permiso para Jefe Recursos Humanos y Encargados
 def validarpermisoRRHH(request,id):
-	""" Metodo para validar los permisos en general"""
-	form = []
+	""" Metodo para validar los permisos usado por el jefe de RRHH 
+	y encargados, este metodo valida un solo permiso en particular """
+	permiso = []
 	try:
 		permiso = Permiso.objects.get(id=id)
 		if request.method == "POST":
@@ -88,14 +101,22 @@ def validarpermisoRRHH(request,id):
 
 # Validar permiso para Jefe de Unidad y Encargados
 def validarpermiso(request,id):
-	""" Metodo para validar los permisos en general"""
-	form = []
+	""" Metodo para validar los permisos usado por el jefe de unidad 
+	y encargados """
+	permiso = []
 	try:
-		permiso = Permiso.objects.get(id=id)
+		permiso = Permiso.objects.get(id=id) 
+		permiso = [] if permiso.ced_jefe_inmed != "" else permiso
 		if request.method == "POST":
-			pass
-		else:
-			pass
+			mode = request.POST.get("mode");
+			if mode == "rechazar":
+				permiso.delete();
+			elif mode == "validar":
+				permiso.ced_jefe_inmed = request.user.username
+				permiso.save()
+			else:
+				pass
+			return HttpResponseRedirect(reverse('validar'))
 	except:
 		pass # Si el permiso con ese id no existe, se controla desde el template para poner un 404
 	return render(request,"permisos/validarpermiso.html",{"permiso":permiso})
