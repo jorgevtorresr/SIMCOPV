@@ -79,7 +79,7 @@ def validarpermisosRRHH(request):
 	permisos = []
 	try: 
 		user.groups.get(name="Jefe de Talento Humano y Encargados")
-		permisos = Permiso.objects.filter(estado=True).exclude(ced_jefe_inmed="")
+		permisos = Permiso.objects.filter(estado=True,ced_jef_talent="").exclude(ced_jefe_inmed="")
 	except:
 		pass
 	return render(request,"permisos/validarpermisos.html",{"permisos":permisos,"RRHH":True})
@@ -91,10 +91,17 @@ def validarpermisoRRHH(request,id):
 	permiso = []
 	try:
 		permiso = Permiso.objects.get(id=id)
+		permiso = [] if permiso.ced_jef_talent != "" else permiso
 		if request.method == "POST":
-			pass
-		else:
-			pass
+			mode = request.POST.get("mode");
+			if mode == "rechazar":
+				permiso.delete();
+			elif mode == "validar":
+				permiso.ced_jef_talent = request.user.username
+				permiso.save()
+			else:
+				pass
+			return HttpResponseRedirect(reverse('validarRRHH'))
 	except:
 		pass # Si el permiso con ese id no existe, se controla desde el template para poner un 404
 	return render(request,"permisos/validarpermisoRRHH.html",{"permiso":permiso})
