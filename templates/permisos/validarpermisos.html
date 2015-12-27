@@ -16,7 +16,27 @@
     <strong>Alerta!</strong> {{message}}  
   </div>
   {% endfor %}
-	{% endif %}
+{% endif %}
+	{% if permisos %}
+	<div class="row">
+		<div class="col-sm-1 hidden-xs hidden-sm">
+		</div>
+		<div class="col-xs-12 col-md-10">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					Hay 
+					{% if permisos|length == 1 %}
+					<span class="badge">{{permisos|length}}</span> 
+					Solicitud de Permiso Pendiente de Revisión
+					{% else %}
+					Solicitudes de Permisos Pendientes de Revisión
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-1 hidden-xs hidden-sm">
+		</div>
+	</div>
 	{% for permiso in permisos %}
 		<div class="row">
 			<div class="col-sm-1 hidden-xs hidden-sm">
@@ -69,4 +89,15 @@
 			</div>
 		</div>
 	{% endfor %}
+	{% else %}
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<p>No hay peticiones de permisos actualmente</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endif %}
 {% endblock content %}

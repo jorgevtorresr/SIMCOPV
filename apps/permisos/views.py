@@ -58,7 +58,7 @@ def permiso(request):
 					permiso.save()
 					messages.success(request,"Permiso ingresado correctamente")
 		return HttpResponseRedirect(reverse("permiso"))	
-	return render(request, "permisos/permiso.html",{})
+	return render(request, "permisos/solicitarpermiso.html",{})
 
 @login_required
 def validarpermisos(request):
@@ -72,6 +72,7 @@ def validarpermisos(request):
 		pass # If user has no a Group, It don't work
 	return render(request,"permisos/validarpermisos.html",{"permisos":permisos})
 
+@login_required
 def validarpermisosRRHH(request):
 	""" Metodo usado por el jefe de RRHH para ver el listado de 
 	permisos para validarlos, previa validación por parte de los jefes inmediatos """
@@ -82,9 +83,10 @@ def validarpermisosRRHH(request):
 		permisos = Permiso.objects.filter(estado=True,ced_jef_talent="").exclude(ced_jefe_inmed="")
 	except:
 		pass
-	return render(request,"permisos/validarpermisos.html",{"permisos":permisos,"RRHH":True})
+	return render(request,"permisos/validarpermisos.html",{"permisos":permisos,"RRHH":True,"user":user})
 
 # Validar permiso para Jefe Recursos Humanos y Encargados
+@login_required
 def validarpermisoRRHH(request,id):
 	""" Metodo para validar los permisos usado por el jefe de RRHH 
 	y encargados, este metodo valida un solo permiso en particular """
@@ -93,12 +95,18 @@ def validarpermisoRRHH(request,id):
 		permiso = Permiso.objects.get(id=id)
 		permiso = [] if permiso.ced_jef_talent != "" else permiso
 		if request.method == "POST":
-			mode = request.POST.get("mode");
+			mode = request.POST.get("mode","")
 			if mode == "rechazar":
 				permiso.delete();
 			elif mode == "validar":
-				permiso.ced_jef_talent = request.user.username
-				permiso.save()
+				comprobante = request.POST.get("comprobante","off")
+				if comprobante == "on":
+					permiso.ced_jef_talent = request.user.username
+					permiso.save()
+				else:
+					permiso.ced_jef_talent = request.user.username
+					permiso.estado = False
+					permiso.save()
 			else:
 				pass
 			return HttpResponseRedirect(reverse('validarRRHH'))
@@ -107,6 +115,7 @@ def validarpermisoRRHH(request,id):
 	return render(request,"permisos/validarpermisoRRHH.html",{"permiso":permiso})
 
 # Validar permiso para Jefe de Unidad y Encargados
+@login_required
 def validarpermiso(request,id):
 	""" Metodo para validar los permisos usado por el jefe de unidad 
 	y encargados """
@@ -117,7 +126,7 @@ def validarpermiso(request,id):
 		if request.method == "POST":
 			mode = request.POST.get("mode");
 			if mode == "rechazar":
-				permiso.delete();
+				permiso.delete()
 			elif mode == "validar":
 				permiso.ced_jefe_inmed = request.user.username
 				permiso.save()

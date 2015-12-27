@@ -32,6 +32,11 @@
 		<div class="col-xs-12 col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-body">
+					<div class="pull-left">
+						<a href="{% url 'validarRRHH' %}" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Regresar</a>
+					</div>
+					<br>
+					<br>
 					<form action="" role="form" class="form" method="post" id="validarform"> 
 						{% csrf_token %}
 						<div class="form-group">

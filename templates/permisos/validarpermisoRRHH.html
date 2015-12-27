@@ -32,6 +32,11 @@
 		<div class="col-xs-12 col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-body">
+					<div class="pull-left">
+						<a href="{% url 'validarRRHH' %}" class="btn btn-default"><span class="glyphicon glyphicon-menu-left"></span> Regresar</a>
+					</div>
+					<br>
+					<br>
 					<form action="" role="form" class="form" method="post" id="validarform"> 
 						{% csrf_token %}
 						<div class="form-group">
@@ -69,7 +74,12 @@
 			            		<option value="Imputable">Imputable</option>
 			            		<option value="No Imputable">No Imputable</option>
 			            	</select>
-			            </div>			           
+			            </div>	
+		            	<div class="checkbox">
+			            	<label for="id_comprobante">
+			            		<input type="checkbox" name="comprobante" id="id_comprobante"> ¿Necesita Comprobante?
+			            	</label>
+		            	</div>
 			            <a href="#modal-accept" id="avalidar" data-toggle="modal" class="btn btn-primary pull-right">Validar</a>
 			             <input type="hidden" id="inputmode" name="mode"> <!-- Input
 			            que contiene el modo (validar o rechazar) y se lo envía en el POST -->

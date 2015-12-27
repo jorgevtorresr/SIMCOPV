@@ -21,6 +21,16 @@ from .models import Persona, TipoNotificacion, Periodo, Notificacion, Unidad, Gl
 from .forms import PersonaForm, LoginForm, UnidadForm, FrontImages, PeriodoForm, PersonaModificarForm
 from .serializers import (UserSerializer, PersonaSerializer, TipoNotificacionSerializer, NotificacionSerializer, PeriodoSerializer)
 
+# Decorador (para verificar si un usuario pertenece a un grupo o no)
+def group_required(*group_names):
+    """Requires user membership in at least one of the groups passed in."""
+    def in_groups(u):
+        if u.is_authenticated():
+            if bool(u.groups.filter(name__in=group_names)) | u.is_superuser:
+                return True
+        return False
+    return user_passes_test(in_groups)
+
 # Create your views here.
 def index(request):
 	images = []
@@ -30,12 +40,15 @@ def index(request):
 			images.append("{0}frontimages/".format(settings.MEDIA_URL)+image)
 	return render(request,'index.html',{"images":images})
 
+@login_required
 def base(request):
 	usuario = request.user
 	if usuario.check_password(usuario.username):
 		return HttpResponseRedirect(reverse("change_password"))
 	return render(request,'base.html',{})
 
+@login_required
+@group_required('Secretarias','Jefe de Talento Humano y Encargados')
 def modificar_periodo(request, id):
 	periodo = Periodo.objects.get(pk=int(id))
 	usuarioperio = periodo.usuario
@@ -48,6 +61,8 @@ def modificar_periodo(request, id):
 		form = PeriodoForm(instance=periodo)
 	return render(request, "usuarios/modificarperiodo.html",{"form":form,"usuarioperio":usuarioperio})
 
+@login_required
+@group_required('Secretarias','Jefe de Talento Humano y Encargados')
 def ver_periodos(request):
 	usuario = request.GET.get("buscar","")
 	periodos = []
@@ -58,6 +73,8 @@ def ver_periodos(request):
 		pass
 	return render(request,"usuarios/verperiodos.html",{"periodos":periodos})
 
+@login_required
+@group_required('Secretarias','Jefe de Talento Humano y Encargados')
 def activar_usuarios(request):
 	buscar = request.GET.get("buscar","")
 	if request.method == "POST":
@@ -75,6 +92,8 @@ def activar_usuarios(request):
 		pass
 	return render(request,"usuarios/activarusuarios.html",{"noactivos":noactivos})
 
+@login_required
+@group_required('Secretarias','Jefe de Talento Humano y Encargados')
 def cambiar_password(request,id):
 	funcionario = User.objects.get(pk=int(id))
 	if request.method == "POST":
@@ -86,6 +105,8 @@ def cambiar_password(request,id):
 		return HttpResponseRedirect(reverse("base"))
 	return render(request,"usuarios/cambiarpassword.html",{"funcionario":funcionario})
 
+@login_required
+@group_required('Secretarias','Jefe de Talento Humano y Encargados')
 def ver_usuarios(request):
 	if request.method == "POST":
 		id = request.POST.get("idusuario","")
@@ -96,6 +117,8 @@ def ver_usuarios(request):
 		return HttpResponseRedirect(reverse("verusuarios"))
 	return render(request, "usuarios/verusuarios.html",{})
 
+@login_required
+@group_required('Secretarias','Jefe de Talento Humano y Encargados')
 def modificar_usuario(request, id):
 	user = Persona.objects.get(pk=id)
 	if request.method == "POST":
@@ -109,6 +132,8 @@ def modificar_usuario(request, id):
 		form = PersonaModificarForm(instance=user)
 	return render(request, "usuarios/modificarusuario.html",{"form":form})
 
+@login_required
+@group_required('Secretarias','Jefe de Talento Humano y Encargados')
 def agregar_periodo(request):	
 	if request.method == "POST":
 		year = request.POST.get("fecha","")
@@ -143,6 +168,8 @@ def agregar_periodo(request):
 	fecha = datetime.now().year + 1
 	return render(request, "usuarios/agregarperiodo.html",{"fecha":fecha})
 
+@login_required
+@group_required('Secretarias','Jefe de Talento Humano y Encargados')
 def agregar_periodoporusuario(request):
 	years = range(1971,2051)
 	if request.method == "POST":
@@ -174,20 +201,21 @@ def creacionderoles():
 	validarvacaciones, p4 = GlobalPermission.objects.get_or_create(codename="validar_vacaciones", name="Validar Vacaciones") 
 	registrarusuarios, p5 = GlobalPermission.objects.get_or_create(codename="registrar_usuarios", name="Registrar Usuarios")
 	cambiarpassword, p6 = GlobalPermission.objects.get_or_create(codename="cambiar_password", name="Cambiar Password")
+	generarreportes, p7 = GlobalPermission.objects.get_or_create(codename="generar_reportes", name="Generar Reportes")
 	# Asignación de permisos a los diversos grupos
 	jefesinmediatos.permissions.clear()
-	jefesinmediatos.permissions = (crearvacaciones,pedirpermiso,validarpermiso)
+	jefesinmediatos.permissions = (crearvacaciones,pedirpermiso,validarpermiso,generarreportes)
 	secretarias.permissions.clear()
-	secretarias.permissions = (registrarusuarios,cambiarpassword,pedirpermiso)
+	secretarias.permissions = (registrarusuarios,cambiarpassword,pedirpermiso,generarreportes)
 	usuarios.permissions.clear()
 	usuarios.permissions.add(pedirpermiso)
 	gerentes.permissions.clear()
-	gerentes.permissions.add(validarpermiso)
+	gerentes.permissions.add(validarpermiso,generarreportes)
 	jefesdetalento.permissions.clear()
-	jefesdetalento.permissions = (validarvacaciones, validarpermiso, registrarusuarios, cambiarpassword, pedirpermiso)
+	jefesdetalento.permissions = (validarvacaciones, validarpermiso, registrarusuarios, cambiarpassword, pedirpermiso, generarreportes)
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name='Secretarias').count() == 0)
+@group_required('Secretarias','Jefe de Talento Humano y Encargados')
 def asignar_roles(request):
 	creacionderoles()
 	if request.is_ajax():
@@ -253,6 +281,8 @@ def ajax_usuario_search(request):
 			pass
 	return render(request,"usuarios/usuario-search.html",{"ajax":ajax})
 
+@login_required
+@group_required('Secretarias','Jefe de Talento Humano y Encargados')
 def agregar_usuario(request):
 	if request.method == "POST":
 		if request.POST.get("unidad","") == "unidad":
@@ -307,6 +337,7 @@ def ajax_tabla_agregarperiodo(request):
 	return render(request,"usuarios/tabla-agregarperiodo.html",{"usuarios":usuarios})
 
 @login_required
+@group_required('Secretarias','Jefe de Talento Humano y Encargados')
 def change_password(request):
 	if request.method == "POST":
 		oldpassword = request.POST.get("oldpassword","")
@@ -323,6 +354,8 @@ def change_password(request):
 				messages.error(request, "Su anterior password no coincide")
 	return render(request,"usuarios/change-password.html",{})
 
+@login_required
+@group_required('Secretarias','Jefe de Talento Humano y Encargados')
 def images(request):
 	if request.method == "POST":
 		form = FrontImages(request.POST, request.FILES)
@@ -373,6 +406,7 @@ def existe(f):
 	ruta = '{0}/{1}'.format(settings.MEDIA_ROOT,'frontimages/{0}'.format(filename))
 	return os.path.exists(ruta)
 
+@login_required
 def auth_logout(request):
 	logout(request)
 	return HttpResponseRedirect("/")

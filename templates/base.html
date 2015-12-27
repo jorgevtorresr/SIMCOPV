@@ -1,4 +1,5 @@
 {% load static from staticfiles %}
+{% load group_tags %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -142,6 +143,7 @@
             <li class="active">
               <a href="{% url 'base' %}"><i class='glyphicon glyphicon-dashboard'></i> <span>Inicio</span></a>
             </li>
+            {% if request.user|has_group:"Secretarias" or request.user|has_group:"Jefe de Talento Humano y Encargados" %}
             <li>
               <a href="#"><i class='glyphicon glyphicon-user'></i><span>Usuarios</span>
               <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div>
@@ -164,18 +166,21 @@
                 <li><a href="{% url 'verperiodos' %}"><span class="glyphicon glyphicon-record"></span> Ver Periodos</a></li>
               </ul>
             </li>
+            {% endif %}
             <li>
               <a href="#"><i class='glyphicon glyphicon-pencil'></i> <span>Permisos</span>
               <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div></a>
               <ul class="nav nav-second-level">
                 {% if perms.usuarios.pedir_permiso %}
                   <li><a href="{% url 'permiso' %}"><span class="glyphicon glyphicon-record"></span> Solicitar Permiso</a></li>
-                  <li><a href="#"><span class="glyphicon glyphicon-record"></span> Ver Permisos</a></li>
+                  <li><a href="#"><span class="glyphicon glyphicon-record"></span> Ver Permisos (Propios)</a></li>
                 {% endif %}
                 {% if perms.usuarios.validar_permiso %}
-                  <li><a href="{% url "validar" %}"><span class="glyphicon glyphicon-record"></span> Validar Permisos</a></li>
+                  <li><a href="{% url "validar" %}"><span class="glyphicon glyphicon-record"></span> Validar Permisos (Unidad)</a></li>
                 {% endif %}
-                <li><a href="{% url "validarRRHH" %}"><span class="glyphicon glyphicon-record"></span> Validar Permisos (RRHH)</a></li>
+                {% if request.user|has_group:"Jefe de Talento Humano y Encargados" %}
+                  <li><a href="{% url "validarRRHH" %}"><span class="glyphicon glyphicon-record"></span> Validar Permisos (Talento)</a></li>
+                {% endif %}
               </ul>
             </li>
             <li>
@@ -191,6 +196,7 @@
                 <li><a href="#"><span class="glyphicon glyphicon-record"></span> Ver Vacaciones</a></li>
               </ul>
             </li>
+            {% if request.user|has_group:"Secretarias" or request.user|has_group:"Jefe de Talento Humano y Encargados" %}
             <li><a href="#"><i class='glyphicon glyphicon-th'></i> <span>Administración</span>
             <div class="pull-right"><span class="glyphicon glyphicon-menu-down"></span></div></a>
               <ul class="nav nav-second-level">
@@ -200,8 +206,14 @@
                 <li><a href="{% url 'activarusuarios' %}"><span class="glyphicon glyphicon-record"></span> Activar Usuarios</a></li>
               </ul>
             </li>
+            {% endif %}
+            {% if perms.usuarios.generar_reportes %}
             <li><a href="#"><i class='glyphicon glyphicon-bookmark'></i> <span>Reportes</span></a></li>
+            {% endif %}
+            {% if request.user|has_group:"Secretarias" or request.user|has_group:"Jefe de Talento Humano y Encargados" %}
             <li><a href="{% url 'config' %}"><i class='glyphicon glyphicon-cog'></i> <span>Configuracion</span></a></li>
+            {% endif %}
+
           </ul><!-- /.sidebar-menu -->
           </div>
           {% endblock %}
