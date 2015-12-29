@@ -1,6 +1,7 @@
 #! python2
 # -*- coding: utf-8 -*-
 from apps.usuarios.models import Periodo
+from apps import group_required
 from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -61,6 +62,7 @@ def permiso(request):
 	return render(request, "permisos/solicitarpermiso.html",{})
 
 @login_required
+@group_required("Jefes Inmediatos","Jefe de Talento Humano y Encargados","Gerente y Encargados")
 def validarpermisos(request):
 	""" Metodo usado por los jefes de unidad, gerente y encargados
 		para validar los permisos ingresados por los usuarios"""
@@ -72,7 +74,32 @@ def validarpermisos(request):
 		pass # If user has no a Group, It don't work
 	return render(request,"permisos/validarpermisos.html",{"permisos":permisos})
 
+# Validar permiso para Jefes de Unidad
 @login_required
+@group_required("Jefes Inmediatos","Jefe de Talento Humano y Encargados","Gerente y Encargados")
+def validarpermiso(request,id):
+	""" Metodo para validar los permisos usado por el jefe de unidad 
+	y encargados """
+	permiso = []
+	try:
+		permiso = Permiso.objects.get(id=id) 
+		permiso = [] if permiso.ced_jefe_inmed != "" else permiso
+		if request.method == "POST":
+			mode = request.POST.get("mode");
+			if mode == "rechazar":
+				permiso.delete()
+			elif mode == "validar":
+				permiso.ced_jefe_inmed = request.user.username
+				permiso.save()
+			else:
+				pass
+			return HttpResponseRedirect(reverse('validar'))
+	except:
+		pass # Si el permiso con ese id no existe, se controla desde el template para poner un 404
+	return render(request,"permisos/validarpermiso.html",{"permiso":permiso})
+
+@login_required
+@group_required("Jefe de Talento Humano y Encargados")
 def validarpermisosRRHH(request):
 	""" Metodo usado por el jefe de RRHH para ver el listado de 
 	permisos para validarlos, previa validación por parte de los jefes inmediatos """
@@ -80,13 +107,14 @@ def validarpermisosRRHH(request):
 	permisos = []
 	try: 
 		user.groups.get(name="Jefe de Talento Humano y Encargados")
-		permisos = Permiso.objects.filter(estado=True,ced_jef_talent="").exclude(ced_jefe_inmed="")
+		permisos = Permiso.objects.filter(estado=True,ced_jef_talent="").exclude(ced_jefe_inmed="",ced_gerente="")
 	except:
 		pass
 	return render(request,"permisos/validarpermisos.html",{"permisos":permisos,"RRHH":True,"user":user})
 
 # Validar permiso para Jefe Recursos Humanos y Encargados
 @login_required
+@group_required("Jefe de Talento Humano y Encargados")
 def validarpermisoRRHH(request,id):
 	""" Metodo para validar los permisos usado por el jefe de RRHH 
 	y encargados, este metodo valida un solo permiso en particular """
@@ -114,28 +142,23 @@ def validarpermisoRRHH(request,id):
 		pass # Si el permiso con ese id no existe, se controla desde el template para poner un 404
 	return render(request,"permisos/validarpermisoRRHH.html",{"permiso":permiso})
 
-# Validar permiso para Jefe de Unidad y Encargados
+
 @login_required
-def validarpermiso(request,id):
-	""" Metodo para validar los permisos usado por el jefe de unidad 
-	y encargados """
-	permiso = []
-	try:
-		permiso = Permiso.objects.get(id=id) 
-		permiso = [] if permiso.ced_jefe_inmed != "" else permiso
-		if request.method == "POST":
-			mode = request.POST.get("mode");
-			if mode == "rechazar":
-				permiso.delete()
-			elif mode == "validar":
-				permiso.ced_jefe_inmed = request.user.username
-				permiso.save()
-			else:
-				pass
-			return HttpResponseRedirect(reverse('validar'))
-	except:
-		pass # Si el permiso con ese id no existe, se controla desde el template para poner un 404
-	return render(request,"permisos/validarpermiso.html",{"permiso":permiso})
+@group_required("Gerente y Encargados")
+def validarpermisosGeren(request):
+	return render(request,"permisos/validarpermisos",{"permisos":permisos,"Geren":True})
+
+# Validar permiso para Gerente y Encargados
+@login_required
+@group_required("Gerente y Encargados")
+def validarpermisoGeren(request,id):
+	return render(request,"permisos/validarpermisoGeren.html",{"permiso":permiso})
+
+@login_required
+def vermispermisos(request):
+	""" Metodo que permite a los peticionarios ver los permisos y el estado de los mismos"""
+	permisos = Permiso.objects.filter(usuario=request.user)
+	return render(request,"permisos/verpermisos.html",{"permisos":permisos})
 
 # Create your views here.
 class PermisoViewSet(viewsets.ModelViewSet):

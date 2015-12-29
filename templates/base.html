@@ -173,13 +173,16 @@
               <ul class="nav nav-second-level">
                 {% if perms.usuarios.pedir_permiso %}
                   <li><a href="{% url 'permiso' %}"><span class="glyphicon glyphicon-record"></span> Solicitar Permiso</a></li>
-                  <li><a href="#"><span class="glyphicon glyphicon-record"></span> Ver Permisos (Propios)</a></li>
+                  <li><a href="{% url 'verpermisos' %}"><span class="glyphicon glyphicon-record"></span> Ver Permisos (Propios)</a></li>
                 {% endif %}
                 {% if perms.usuarios.validar_permiso %}
                   <li><a href="{% url "validar" %}"><span class="glyphicon glyphicon-record"></span> Validar Permisos (Unidad)</a></li>
                 {% endif %}
                 {% if request.user|has_group:"Jefe de Talento Humano y Encargados" %}
                   <li><a href="{% url "validarRRHH" %}"><span class="glyphicon glyphicon-record"></span> Validar Permisos (Talento)</a></li>
+                {% endif %}
+                {% if request.user|has_group:'Gerente y Encargados' %}
+                  <li><a href="{% url "validarGerencia" %}"><span class="glyphicon glyphicon-record"></span> Validar Permisos (Gerencia)</a></li>
                 {% endif %}
               </ul>
             </li>

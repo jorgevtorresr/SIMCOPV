@@ -3,11 +3,12 @@
 import os
 import json
 import datetime as dt
+from apps import group_required
 from datetime import datetime
 from django.db.models import Q, F, Max
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.storage import default_storage
@@ -20,16 +21,6 @@ from rest_framework import viewsets
 from .models import Persona, TipoNotificacion, Periodo, Notificacion, Unidad, GlobalPermission
 from .forms import PersonaForm, LoginForm, UnidadForm, FrontImages, PeriodoForm, PersonaModificarForm
 from .serializers import (UserSerializer, PersonaSerializer, TipoNotificacionSerializer, NotificacionSerializer, PeriodoSerializer)
-
-# Decorador (para verificar si un usuario pertenece a un grupo o no)
-def group_required(*group_names):
-    """Requires user membership in at least one of the groups passed in."""
-    def in_groups(u):
-        if u.is_authenticated():
-            if bool(u.groups.filter(name__in=group_names)) | u.is_superuser:
-                return True
-        return False
-    return user_passes_test(in_groups)
 
 # Create your views here.
 def index(request):
