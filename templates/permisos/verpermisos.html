@@ -1,27 +1,94 @@
 {% extends "base.html" %}
 {% block content %}
-	{% if permisos %}
-	<p>No hay permisos </p>
-	{% else %}
-	<div class="row">
-		<div class="col-xs-12">
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>
-						
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-	{% endif %}
+    <h4>
+      <div class="text-center">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            Ver Permisos
+          </div>
+        </div>
+      </div>
+    </h4>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4>Permisos Activos</h4>
+        </div>
+        <div class="panel-body">
+            {% if activos %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Descripción</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Estado</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for activo in activos %}
+                                    <tr>
+                                        <td>{{ activo.descripcion }}</td>
+                                        <td>{{ activo.fecha_inicio }}</td>
+                                        <td>{{ activo.fecha_fin }}</td>
+                                        <td> <strong style="color:green">Activo</strong> </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p>No hay permisos activos </p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4>Historial de Permisos</h4>
+        </div>
+        <div class="panel-body">
+            {% if historicos %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Descripción</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Comprobante</th>
+                                    <th>Periodo</th>
+                                    <th>Tipo</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for historico in historicos %}
+                                    <tr>
+                                        <td>{{ historico.descripcion }}</td>
+                                        <td>{{ historico.fecha_inicio }}</td>
+                                        <td>{{ historico.fecha_fin }}</td>
+                                        {% if historicos.comprobante %}
+                                            LOL
+                                        {% endif %}
+                                        <td>{{ historico.comprobante }}</td>
+                                        <td>{{ historico.periodo }}</td>
+                                        <td>{{ historico.tipo }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p> No hay permisos actualmente </p>
+            {% endif %}
+        </div>
+    </div>
+    <br>
 {% endblock content %}

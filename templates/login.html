@@ -3,11 +3,37 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title>SIMCOPV Login</title>
+	<title>SICOP Login</title>
 	<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css"%}">
 	<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-theme.min.css" %}">
+	<style>
+		.base {
+	    background: #15394F; /* For browsers that do not support gradients */
+	    background: -webkit-linear-gradient(#15394F, #3C6E9E); /* For Safari 5.1 to 6.0 */
+	    background: -o-linear-gradient(#15394F, #3C6E9E); /* For Opera 11.1 to 12.0 */
+	    background: -moz-linear-gradient(#15394F, #3C6E9E); /* For Firefox 3.6 to 15 */
+	    background: linear-gradient(#15394F, #3C6E9E); /* Standard syntax */
+		}
+	</style>
 </head>
-<body>
+<body class="base">
+    <div class="modal fade" id="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Si olvidó su usuario/contraseña...</h4>
+                </div>
+                <div class="modal-body">
+                    <p>El nombre de usuario siempre es su número de cédula</p>
+                    <p>Si olvidó su contraseña.. por favor comuníquese con el Departamento de RRHH</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" a>Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 	<div class="container">
 		<br>
 		<div class="row hidden-sm hidden-xs">
@@ -25,7 +51,7 @@
 			<div class="col-xs-12 col-md-6">
 				<div class="panel panel-default">
 					<div class="panel-body">
-						<h3 class="text-center">SIMCOPV </h3>
+						<h3 class="text-center">SICOP </h3>
 						<h4 class="text-center">Login</h4>
 						{% if men %}
 						<div class="alert alert-warning">
@@ -40,13 +66,20 @@
 								{{form.usuario}}	
 							</div>
 							<div class="form-group">
-								<label for="id_{{form.password.name}}">Password:</label>
+								<label for="id_{{form.password.name}}">Contraseña:</label>
 								{{form.password}}
 							</div>
-							<div class="form-group pull-right">
-								<button class="btn btn-primary" type="submit">Iniciar Sesión</button>
-							</div>
+                            <div>
+                                <div class="form-group pull-left">
+                                    <a href="#modal" data-toggle="modal" data-target="#modal"><strong>¿Olvido su usuario o contraseña?</strong></a>
+                                </div>
+                                <div class="form-group pull-right">
+                                    <button class="btn btn-primary" type="submit">Iniciar Sesión</button>
+                                </div>
+                            </div>
 						</form>
+                        <br>
+                        <br>
 						{{form.errors}}
 					</div>
 				</div>		

@@ -146,7 +146,16 @@ def validarpermisoRRHH(request,id):
 @login_required
 @group_required("Gerente y Encargados")
 def validarpermisosGeren(request):
-	return render(request,"permisos/validarpermisos",{"permisos":permisos,"Geren":True})
+	""" Metodo usado por los Gerente y encargados
+		para validar los permisos ingresados por los usuarios"""
+	user = request.user
+	permisos = []
+	try:
+		# I Dont Know SHOULD WAIT
+		permisos = Permiso.objects.filter(estado=True,ced_gerente="").exclude()
+	except:
+		pass # If user has no a Group, It don't work
+	return render(request,"permisos/validarpermisos",{"permisos":"","Geren":True})
 
 # Validar permiso para Gerente y Encargados
 @login_required
@@ -158,7 +167,9 @@ def validarpermisoGeren(request,id):
 def vermispermisos(request):
 	""" Metodo que permite a los peticionarios ver los permisos y el estado de los mismos"""
 	permisos = Permiso.objects.filter(usuario=request.user)
-	return render(request,"permisos/verpermisos.html",{"permisos":permisos})
+	activos = permisos.filter(estado=True)
+	historicos = permisos.filter(estado=False)
+	return render(request,"permisos/verpermisos.html",{"activos":activos,"historicos":historicos})
 
 # Create your views here.
 class PermisoViewSet(viewsets.ModelViewSet):
